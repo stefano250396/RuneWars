@@ -1,0 +1,976 @@
+=== HEROES ===
+[
+  {
+    "Name": "Zaccaria",
+    "Magical Power": 1.0,
+    "Attack": 1.0,
+    "Defense": 2.0,
+    "Health": 10.0,
+    "Special": "Item=1; Enchant=1",
+    "Runes": "P=9; U=5; W=1",
+    "Passives": "During the First Turn of the Game you Always go First",
+    "Active1": "UPP: Plus 1 Magical Power Until the end of Turn, Minus X Defense to Any Hero, X Equals Zaccaria's Magical Power",
+    "Active2": "WCPP: Create a 1/1 Crook Token On your side of All Battlefields",
+    "Notes": null,
+    "Budget": 30.0
+  },
+  {
+    "Name": "Sly",
+    "Magical Power": 0.0,
+    "Attack": 2.0,
+    "Defense": 0.0,
+    "Health": 11.0,
+    "Special": "Item=2",
+    "Runes": "P=6; B=4; C=3; G=2",
+    "Passives": "At the Beninning of the Game Shuffle a Purple Knife Into your Draw Pile",
+    "Active1": "PPPPC: Create a Purple Knife in your Hand",
+    "Active2": "PGB: Sly Gains Attack equal to the Number of Items [Your] Heroes Have Equipped (Dead or Alive)",
+    "Notes": null,
+    "Budget": "29 + knife"
+  },
+  {
+    "Name": "Jack",
+    "Magical Power": 0.0,
+    "Attack": 3.0,
+    "Defense": 0.0,
+    "Health": 10.0,
+    "Special": "Item=2",
+    "Runes": "C=8; B=4; P=3",
+    "Passives": "If you are going First, And Jack is your Active Hero, He Gains 2 Attack",
+    "Active1": "CCCP: You can Play an Item with 2 or Less Runes Immediately When this Effect Resolves",
+    "Active2": "CCBB: Minus X Attack to Any Hero, X Equals Jack's Attack [Bonus]",
+    "Notes": null,
+    "Budget": 29.0
+  },
+  {
+    "Name": "Majani",
+    "Magical Power": 2.0,
+    "Attack": 0.0,
+    "Defense": 2.0,
+    "Health": 10.0,
+    "Special": "Enchant=2",
+    "Runes": "G=6; R=5; U=4",
+    "Passives": "Enchanted Enemy Heroes Cannot [Gain Celerity] Play More than 2 Cards in the Same Turn",
+    "Active1": "GGR: Majani Gains Defense equal to the number of Enchants You Own on the Field or Stack",
+    "Active2": "GGRU[U]:One Card you Own in the Stack Becomes an Enchant if it has less [or equal] runes than your Green Runes",
+    "Notes": null,
+    "Budget": 30.0
+  },
+  {
+    "Name": "Moraga",
+    "Magical Power": 0.0,
+    "Attack": 2.0,
+    "Defense": 2.0,
+    "Health": 10.0,
+    "Special": "Item=1;",
+    "Runes": "G=8; W=5; C=2",
+    "Passives": "At the End of Moraga's Turn Restore 1 Health to All of Your equipped Heroes",
+    "Active1": "GGGGC: Create an Amber Sword-Axe in your Hand",
+    "Active2": "WWGG: Moraga Deals Magic Damage equal to his Defense to an Enemy Hero on a Different Battlefield",
+    "Notes": null,
+    "Budget": 29.5
+  },
+  {
+    "Name": "Doran",
+    "Magical Power": 0.0,
+    "Attack": 1.0,
+    "Defense": 2.0,
+    "Health": 10.0,
+    "Special": "Item=4",
+    "Runes": "G=8; W=4; G=4",
+    "Passives": "When you play an Item, Gain Celerity, Doran can play Items of Any Color",
+    "Active1": "CCW[W]: The Next Item you play This Turn Activates Immediately ",
+    "Active2": "CGG: [At the end of Doran's Turn] If Doran is at Half Health or less, He Restores 2 Health to Himself",
+    "Notes": null,
+    "Budget": 31.0
+  }
+]
+
+=== DATABASE CARTE ===
+[
+  {
+    "Nome": "Sear",
+    "Effetto": "Deals 1 Magic Damage to Any Hero",
+    "Rune": "🔴",
+    "Tag": "Base Spell",
+    "Costo": "R",
+    "Notes": ""
+  },
+  {
+    "Nome": "Burn",
+    "Effetto": "Deals 2 Magic Damage to Any Hero",
+    "Rune": "🔴🔴",
+    "Tag": "Base Spell/Module(?)",
+    "Costo": "RR",
+    "Notes": ""
+  },
+  {
+    "Nome": "Scorch",
+    "Effetto": "Deals 3 Magic Damage to Any Hero",
+    "Rune": "🔴🔴🔴",
+    "Tag": "Base Spell",
+    "Costo": "RRR",
+    "Notes": ""
+  },
+  {
+    "Nome": "Metamagic",
+    "Effetto": "Transforms a Card into an Enchantment (Enchantments Add to a card \"At The Beginning of the Round\" They Attach to a Hero and can only Influence Them)",
+    "Rune": "🔴🔴",
+    "Tag": "Base Spell (?)",
+    "Costo": "RR",
+    "Notes": ""
+  },
+  {
+    "Nome": "Enhanced Metamagic (?)",
+    "Effetto": "Same as Metamagic, But it Also Removes as Many \"until, the end of turn\" From a Card as you Want",
+    "Rune": "🔴🔴🔴",
+    "Tag": "Module",
+    "Costo": "RRR",
+    "Notes": ""
+  },
+  {
+    "Nome": "Melt",
+    "Effetto": "Destroy Any 1 Item with [Equal or] Lower Rune Count than this Card",
+    "Rune": "🔴",
+    "Tag": "Base Spell",
+    "Costo": "R",
+    "Notes": ""
+  },
+  {
+    "Nome": "Shatter/Incinerate",
+    "Effetto": "Destroy Any 1 Item",
+    "Rune": "[🔴🔴🔴]",
+    "Tag": "Module",
+    "Costo": "RRR",
+    "Notes": ""
+  },
+  {
+    "Nome": "Hasten",
+    "Effetto": "During the Card Selection Phase if you select this Card, [if your opponent is at 50% Health or lower] You gain Celerity ",
+    "Rune": "🔴",
+    "Tag": "Base Spell",
+    "Costo": "R",
+    "Notes": ""
+  },
+  {
+    "Nome": "\"Borrowed\" Scroll",
+    "Effetto": "Chose a Player During the next Draw Phase they Draw 1[One] additional Card [Si potrebbe fare una condizione tipo \"cultured\" o \"well red\" per questa roba]",
+    "Rune": "🔴🔴",
+    "Tag": "Module",
+    "Costo": "RR",
+    "Notes": ""
+  },
+  {
+    "Nome": "[Infuse Power]",
+    "Effetto": "Chose One Number on a Card, add \"+ Your Magical Power\" After it ",
+    "Rune": "🔴🔴",
+    "Tag": "Module",
+    "Costo": "RR",
+    "Notes": ""
+  },
+  {
+    "Nome": "Quicken",
+    "Effetto": "During the Card Selection Phase if you select this Card and you are going Second, You gain Celerity ",
+    "Rune": "🔵",
+    "Tag": "Base Spell",
+    "Costo": "U",
+    "Notes": ""
+  },
+  {
+    "Nome": "Temporal Mastery",
+    "Effetto": "When this card Resolves you can Play Another Card ",
+    "Rune": "🔵🔵",
+    "Tag": "Base Spell/Module(?)",
+    "Costo": "UU",
+    "Notes": ""
+  },
+  {
+    "Nome": "Enchant",
+    "Effetto": "Transforms a Card into an Enchantment (Enchantments Add to a card \"At The Beginning of the Round\" They Attach to a Hero and can only Influence Them)",
+    "Rune": "🔵🔵",
+    "Tag": "Module",
+    "Costo": "UU",
+    "Notes": ""
+  },
+  {
+    "Nome": "Quick Study",
+    "Effetto": "Plus 1 Magical Power to Any Hero, Until the end of Turn",
+    "Rune": "🔵",
+    "Tag": "Base Spell",
+    "Costo": "U",
+    "Notes": ""
+  },
+  {
+    "Nome": "Research",
+    "Effetto": "Plus 2 Magical Power to Any Hero, Until the end of Turn",
+    "Rune": "🔵🔵",
+    "Tag": "Base Spell",
+    "Costo": "UU",
+    "Notes": ""
+  },
+  {
+    "Nome": "Forbidden Knowledge",
+    "Effetto": "Plus 3 Magical Power to Any Hero, Until the end of Turn",
+    "Rune": "🔵🔵🔵",
+    "Tag": "Base Spell",
+    "Costo": "UUU",
+    "Notes": ""
+  },
+  {
+    "Nome": "Cartography",
+    "Effetto": "When this Card Resolves you can Play Another Card From your Deck With Equal or Fewer Number of runes than This Card, that Shares at least One Rune with This Card [si può scrivere meglio]",
+    "Rune": "🔵🔵🔵",
+    "Tag": "Module",
+    "Costo": "UUU",
+    "Notes": ""
+  },
+  {
+    "Nome": "Frame",
+    "Effetto": "Chose a Player During the next Draw Phase they Draw 1[-One] Less Card [Si potrebbe fare una condizione per questa roba]",
+    "Rune": "🔵🔵",
+    "Tag": "Module",
+    "Costo": "UU",
+    "Notes": ""
+  },
+  {
+    "Nome": "Nick",
+    "Effetto": "Minus 1 Defense to Any Hero, Until the end of Turn",
+    "Rune": "🟣",
+    "Tag": "Base Spell",
+    "Costo": "P",
+    "Notes": ""
+  },
+  {
+    "Nome": "Tear",
+    "Effetto": "Minus 2 Defense to Any Hero, Until the end of Turn",
+    "Rune": "🟣🟣",
+    "Tag": "Base Spell",
+    "Costo": "PP",
+    "Notes": ""
+  },
+  {
+    "Nome": "Assassinate",
+    "Effetto": "Minus 3 Defense to Any Hero, Until the end of Turn",
+    "Rune": "🟣🟣🟣",
+    "Tag": "Base Spell",
+    "Costo": "PPP",
+    "Notes": ""
+  },
+  {
+    "Nome": "Trained Reflexes",
+    "Effetto": "During the Card Selection Phase if you select this Card and you are going First, You gain Celerity ",
+    "Rune": "🟣",
+    "Tag": "Base Spell",
+    "Costo": "P",
+    "Notes": ""
+  },
+  {
+    "Nome": "Escape Plain",
+    "Effetto": "When this card Resolves, if you are going First you can Play Another Card ",
+    "Rune": "🟣🟣",
+    "Tag": "Module",
+    "Costo": "PP",
+    "Notes": ""
+  },
+  {
+    "Nome": "Thievery",
+    "Effetto": "Steal 1 Random Stat Point from Any Hero Until the end of Turn, If you are Going First you get to Chose the Stat",
+    "Rune": "🟣🟣",
+    "Tag": "Module",
+    "Costo": "PP",
+    "Notes": ""
+  },
+  {
+    "Nome": "Block",
+    "Effetto": "Plus 1 Defense to Any Hero, Until the end of Turn",
+    "Rune": "🟢",
+    "Tag": "Base Spell",
+    "Costo": "G",
+    "Notes": ""
+  },
+  {
+    "Nome": "Harden",
+    "Effetto": "Plus 2 Defense to Any Hero, Until the end of Turn",
+    "Rune": "🟢🟢",
+    "Tag": "Base Spell",
+    "Costo": "GG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Stone Skin",
+    "Effetto": "Plus 3 Defense to Any Hero, Until the end of Turn",
+    "Rune": "🟢🟢🟢",
+    "Tag": "Base Spell",
+    "Costo": "GGG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Mend",
+    "Effetto": "Restore 1 Health Point to Any Hero",
+    "Rune": "🟢",
+    "Tag": "Base Spell",
+    "Costo": "G",
+    "Notes": ""
+  },
+  {
+    "Nome": "Heal",
+    "Effetto": "Restore 2 Health Point to Any Hero",
+    "Rune": "🟢🟢",
+    "Tag": "Base Spell",
+    "Costo": "GG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Disenchant",
+    "Effetto": "Destroy Any 1 Enchantment",
+    "Rune": "[🟢🟢🟢]",
+    "Tag": "Module",
+    "Costo": "GGG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Return to the Earth",
+    "Effetto": "Destroy Any 1 Enchantment with [Equal or] Lower Rune Count than this Card",
+    "Rune": "🟢",
+    "Tag": "Base Spell",
+    "Costo": "G",
+    "Notes": ""
+  },
+  {
+    "Nome": "Isolation",
+    "Effetto": "Plus 2 Defense to Any Hero Until the end of Turn, Additionally if the Caster's Current Health is at 50% or Less Restore 2 Health to it ",
+    "Rune": "🟢🟢🟢",
+    "Tag": "Module",
+    "Costo": "GGG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Sharpen Blade",
+    "Effetto": "Plus 1 Attack to Any Hero, Until the end of Turn",
+    "Rune": "🟡",
+    "Tag": "Base Spell",
+    "Costo": "W",
+    "Notes": ""
+  },
+  {
+    "Nome": "Charge",
+    "Effetto": "Plus 2 Attack to Any Hero, Until the end of Turn",
+    "Rune": "🟡🟡",
+    "Tag": "Base Spell",
+    "Costo": "WW",
+    "Notes": ""
+  },
+  {
+    "Nome": "Legion Strike",
+    "Effetto": "Plus 3 Attack to Any Hero, Until the end of Turn",
+    "Rune": "🟡🟡🟡",
+    "Tag": "Base Spell",
+    "Costo": "WWW",
+    "Notes": ""
+  },
+  {
+    "Nome": "Assembly The Legion",
+    "Effetto": "Create 1 1/1 White Legionnaire on [a/this] Battlefield",
+    "Rune": "🟡",
+    "Tag": "Base Spell",
+    "Costo": "W",
+    "Notes": ""
+  },
+  {
+    "Nome": "[Flying unit]",
+    "Effetto": "Create 1 2/2 White Falcon on [a/this] Battlefield",
+    "Rune": "🟡🟡",
+    "Tag": "Module",
+    "Costo": "WW",
+    "Notes": ""
+  },
+  {
+    "Nome": "Equality",
+    "Effetto": "Swap Any One Number on a Card with =2",
+    "Rune": "🟡🟡",
+    "Tag": "Module",
+    "Costo": "WW",
+    "Notes": ""
+  },
+  {
+    "Nome": "Quick Attack",
+    "Effetto": "Minus 2 Attack to your Active Hero, Make an Additional Phisical Attack When this card Resolves [To an Inactive Hero]",
+    "Rune": "🟡🟡🟡",
+    "Tag": "Module",
+    "Costo": "WWW",
+    "Notes": ""
+  },
+  {
+    "Nome": "Heavy Training",
+    "Effetto": "The Next Item you play This Turn Activates Immediately ",
+    "Rune": "🟡",
+    "Tag": "Base Spell",
+    "Costo": "W",
+    "Notes": ""
+  },
+  {
+    "Nome": "Craft",
+    "Effetto": "Transforms a Card into an Item (Items Remove One or More \"Until the end of Turn\" from a Card, They Attach to a Hero and can only Influence Them) They activate at The End of the Turn",
+    "Rune": "⚪",
+    "Tag": "Base Spell/Item",
+    "Costo": "C",
+    "Notes": ""
+  },
+  {
+    "Nome": "Witted",
+    "Effetto": "During the Card Selection Phase if you select this Card, You gain Celerity ",
+    "Rune": "⚪⚪",
+    "Tag": "Base Spell",
+    "Costo": "CC",
+    "Notes": ""
+  },
+  {
+    "Nome": "Exceptional Talent ",
+    "Effetto": "[Add One To any One number in a Card]",
+    "Rune": "⚪⚪⚪",
+    "Tag": "Base Spell",
+    "Costo": "CCC",
+    "Notes": ""
+  },
+  {
+    "Nome": "Parry",
+    "Effetto": "Add One To any One Defense number in a Card ",
+    "Rune": "⚪",
+    "Tag": "Base Spell",
+    "Costo": "C",
+    "Notes": "Only 1 of this module Per Card, might also limit the number of these a single deck can have"
+  },
+  {
+    "Nome": "Lounge",
+    "Effetto": "Add One To any One Attack number in a Card",
+    "Rune": "⚪",
+    "Tag": "Base Spell",
+    "Costo": "C",
+    "Notes": "Only 1 of this module Per Card, might also limit the number of these a single deck can have"
+  },
+  {
+    "Nome": "Combat Ready",
+    "Effetto": "Plus 2 Attack to Any Hero, Plus 2 Defense to Any Hero, Until the end of Turn",
+    "Rune": "⚪⚪⚪⚪",
+    "Tag": "Base Spell",
+    "Costo": "CCCC",
+    "Notes": ""
+  },
+  {
+    "Nome": "Confused Memories",
+    "Effetto": "Shuffle 2 Random cards from your Discard pile in your Deck",
+    "Rune": "⚪⚪",
+    "Tag": "Module",
+    "Costo": "CC",
+    "Notes": ""
+  },
+  {
+    "Nome": "Bandage",
+    "Effetto": "Add One to any One Restore number in a Card ",
+    "Rune": "⚪",
+    "Tag": "Base Spell",
+    "Costo": "C",
+    "Notes": "Only 1 of this module Per Card, might also limit the number of these a single deck can have"
+  },
+  {
+    "Nome": "Jack of All Trades",
+    "Effetto": "When this card Resolves you can Play Two [Gray] Cards ",
+    "Rune": "⚪⚪⚪",
+    "Tag": "Base Spell(?)",
+    "Costo": "CCC",
+    "Notes": ""
+  },
+  {
+    "Nome": "Affinity",
+    "Effetto": "The Next item you play This Turn Activates Immediately",
+    "Rune": "⚪",
+    "Tag": "Module",
+    "Costo": "C",
+    "Notes": ""
+  },
+  {
+    "Nome": "Exhume ",
+    "Effetto": "Suffle 1 Random card from your Discard pile in your Deck",
+    "Rune": "⚫",
+    "Tag": "Base Spell",
+    "Costo": "B",
+    "Notes": ""
+  },
+  {
+    "Nome": "Blackmail",
+    "Effetto": "If the next Opponent's card on the Stack has less Runes than This one, Discard that card, it's effects are negated",
+    "Rune": "⚫",
+    "Tag": "Base Spell",
+    "Costo": "B",
+    "Notes": ""
+  },
+  {
+    "Nome": "Bad Juju",
+    "Effetto": "Any Hero Loses 2 Health",
+    "Rune": "⚫⚫",
+    "Tag": "Base Spell",
+    "Costo": "BB",
+    "Notes": ""
+  },
+  {
+    "Nome": "Dark Ritual",
+    "Effetto": "Chose One Number on a Card, add \"+ Your Magical Power\" After it ",
+    "Rune": "⚫⚫",
+    "Tag": "[module]",
+    "Costo": "BB",
+    "Notes": ""
+  },
+  {
+    "Nome": "Weakness",
+    "Effetto": "Minus 1 Attack to Any Hero, Until the end of turn",
+    "Rune": "⚫",
+    "Tag": "Base Spell",
+    "Costo": "B",
+    "Notes": ""
+  },
+  {
+    "Nome": "Exhaustion",
+    "Effetto": "Minus 2 Attack to Any Hero, Until the end of turn",
+    "Rune": "⚫⚫",
+    "Tag": "Base Spell",
+    "Costo": "BB",
+    "Notes": ""
+  },
+  {
+    "Nome": "Blight",
+    "Effetto": "Minus 3 Attack to Any Hero, Until the end of turn",
+    "Rune": "⚫⚫⚫",
+    "Tag": "Base Spell",
+    "Costo": "BBB",
+    "Notes": "Only 1 of this module Per Turn can resolve "
+  },
+  {
+    "Nome": "Dredge",
+    "Effetto": "Discard the First card of Your deck and your Opponent's",
+    "Rune": "⚫",
+    "Tag": "Base Spell",
+    "Costo": "B",
+    "Notes": ""
+  },
+  {
+    "Nome": "Undeath",
+    "Effetto": "Restore 1 Health Points to Any Hero",
+    "Rune": "⚫",
+    "Tag": "Base Spell (?)",
+    "Costo": "B",
+    "Notes": ""
+  },
+  {
+    "Nome": "Blood Infusion",
+    "Effetto": "Restore 1 Health Point to Two of Your Heroes, Restore 1 Health Point to Any Hero",
+    "Rune": "⚫⚫⚫",
+    "Tag": "Module ",
+    "Costo": "BBB",
+    "Notes": ""
+  },
+  {
+    "Nome": "Outburst ",
+    "Effetto": "Make an Additional Physical Base Attack with Your Active Hero ",
+    "Rune": "🟡🟡🔴",
+    "Tag": "Module",
+    "Costo": "WWR",
+    "Notes": "Da rivedere tutto quello che comprende attacchi bonus "
+  },
+  {
+    "Nome": "Ray of Hellfire",
+    "Effetto": "Deals 2 Damage to Any Hero, Any Hero Loses 1 Health",
+    "Rune": "⚫🔴🔴",
+    "Tag": "Module",
+    "Costo": "BRR",
+    "Notes": ""
+  },
+  {
+    "Nome": "Tormenting Fire",
+    "Effetto": "Deals 2 Damage to Any Hero, Shuffle this card into your Deck ",
+    "Rune": "🟡⚫🔴",
+    "Tag": "Module ",
+    "Costo": "WBR",
+    "Notes": ""
+  },
+  {
+    "Nome": "Scarab Lord",
+    "Effetto": "Create Two 1/1 Scorpion tokens on This Battlefield, If you are going First one of them becomes a 2/1 Scorpion, if your Active opposing Hero has 50% Health or Less one of them becomes a 2/1 Scorpion ",
+    "Rune": "🟡🔴🟣",
+    "Tag": "Module ",
+    "Costo": "WRP",
+    "Notes": ""
+  },
+  {
+    "Nome": "Blood Moon",
+    "Effetto": "Deal 1 Damage to All Heroes ",
+    "Rune": "⚫🔴🔴",
+    "Tag": "Module ",
+    "Costo": "BRR",
+    "Notes": ""
+  },
+  {
+    "Nome": "Outmaneuver",
+    "Effetto": "You gain Celerity, if you have 10 or Less Cards in you Deck, When this card Resolves you can Play Another card, If you are going First the Enemy Active Hero Gets Minus 1 Attack Minus 1 Defense ",
+    "Rune": "⚫🔴🟣",
+    "Tag": "Module",
+    "Costo": "BRP",
+    "Notes": ""
+  },
+  {
+    "Nome": "Search The Catacombs ",
+    "Effetto": "When this card Resolves you can Play Another Card From your Discard Pile With [Equal or] Fewer runes than This Card, It has to share At least 1 Rune with this Card",
+    "Rune": "🔵⚫⚫",
+    "Tag": "Module",
+    "Costo": "UBB",
+    "Notes": ""
+  },
+  {
+    "Nome": "Seal Training ",
+    "Effetto": "Create One 0/3 Seal token on This Battlefield",
+    "Rune": "🟡🔵",
+    "Tag": "Module ",
+    "Costo": "WU",
+    "Notes": ""
+  },
+  {
+    "Nome": "Haze",
+    "Effetto": "If you are going Second, Negate All Stat Changes Of the Enemy Hero/[All Heroes on the Battlefield]",
+    "Rune": "⚪🔵",
+    "Tag": "Moudle",
+    "Costo": "CU",
+    "Notes": ""
+  },
+  {
+    "Nome": "Grave Robbing",
+    "Effetto": "When this card Resolves you can Play Another Card From your Discard Pile With [Equal or] Fewer runes than This Card",
+    "Rune": "🔵⚫🟣🟣",
+    "Tag": "Module",
+    "Costo": "UBPP",
+    "Notes": ""
+  },
+  {
+    "Nome": "Holy Power",
+    "Effetto": "Plus Attack to Any Hero equal to your Magic power",
+    "Rune": "🟡🔵",
+    "Tag": "Module",
+    "Costo": "WU",
+    "Notes": ""
+  },
+  {
+    "Nome": "Vegetation Shield ",
+    "Effetto": "Plus Defense to Any Hero equal to your Magic Power ",
+    "Rune": "🟡🟢",
+    "Tag": "Module",
+    "Costo": "WG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Polarity Shift",
+    "Effetto": "Chose if you want to go First or Second next Turn ",
+    "Rune": "🔵🟣",
+    "Tag": "Module",
+    "Costo": "UP",
+    "Notes": "Non so se voglio Questa carta nel mio gioco "
+  },
+  {
+    "Nome": "Preparation",
+    "Effetto": "You gain Celerity, if you have 10 or More Cards in Your deck, When this card Resolves you can Play Another Card, if you are going Second, Any Hero loses 2 Health ",
+    "Rune": "🔵🔴🟣",
+    "Tag": "Module",
+    "Costo": "urp",
+    "Notes": ""
+  },
+  {
+    "Nome": "Antimagic Coating ",
+    "Effetto": "Reduce Non-Combat damage 1 of your Heroes takes this turn by 2 for Each Damage Instance [For a maximum of 3 damage reduced] Until the end of The Turn ",
+    "Rune": "⚫🟢",
+    "Tag": "Module",
+    "Costo": "BG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Shield Bash ",
+    "Effetto": "Your Active Hero uses it's Defense bonus instead of it's Attack bonus to determine damage Until the End of turn",
+    "Rune": "🟡🟢",
+    "Tag": "Module",
+    "Costo": "WG",
+    "Notes": "Forse è Broken"
+  },
+  {
+    "Nome": "Spell Heist",
+    "Effetto": "If you are going First, Move 1 Enchantment From Any Hero to Any Hero, otherwise destroy 1 Enchantment with less runes than This Card ",
+    "Rune": "🟢🟣🟣",
+    "Tag": "Module",
+    "Costo": "GPP",
+    "Notes": ""
+  },
+  {
+    "Nome": "Smoldering Roots",
+    "Effetto": "Deal damage equal to your Magic Power ",
+    "Rune": "🔴🟢",
+    "Tag": "Module (rare)",
+    "Costo": "RG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Mossy Salve",
+    "Effetto": "Restore 1 Health Point to Any Hero, if your Active Hero has 50% Health or less Restore 2 Health to Any Hero Instead",
+    "Rune": "⚪🟢",
+    "Tag": "Base Spell",
+    "Costo": "CG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Wait for Opportunities ",
+    "Effetto": "If you are going First, Restore 1 Health to Any Hero, Plus 1 Defense to any Hero and -1 Defense to any Hero, otherwise Restore 1 Health to any Hero, Plus 1 Defense to Any Hero ",
+    "Rune": "🟢🟣",
+    "Tag": "Module(?)",
+    "Costo": "GP",
+    "Notes": ""
+  },
+  {
+    "Nome": "Ritual of the Leeches ",
+    "Effetto": "Restore Health equal to your Magic Power",
+    "Rune": "⚫🟢",
+    "Tag": "Module(?)",
+    "Costo": "BG",
+    "Notes": ""
+  },
+  {
+    "Nome": "Second Wind",
+    "Effetto": "Restore Health to [Any Hero] Your Active Hero, Equal to your Hero's Attack Bonus",
+    "Rune": "",
+    "Tag": "Module?",
+    "Costo": "wg",
+    "Notes": ""
+  }
+]
+
+=== CARTE ===
+[
+  {
+    "Nome": "",
+    "Effetto": "If you are going Second, Negate All Stat Changes Of the Enemy Hero",
+    "Rune": "CU",
+    "Colore": "Grigio/Blu",
+    "Quantità": "1.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Restore 1 Health Point to Any Hero, if your Active Hero has 50% Health or less Restore 2 Health to Any Hero Instead",
+    "Rune": "CG",
+    "Colore": "Grigio/Verde",
+    "Quantità": "1.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Plus 1 Defense to Any Hero, Until the end of Turn, Create 1 1/1 White Legionnaire on [a/this] Battlefield",
+    "Rune": "WG",
+    "Colore": "Bianco/Verde",
+    "Quantità": "1.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Pisello",
+    "Rune": "",
+    "Colore": "",
+    "Quantità": "1.0",
+    "Note": "Un pisello è una carta che non può essere giocata da nessun personaggio in genere composta da una runa off color che nessuno dei personaggi può giocare",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "During the Card Selection Phase if you select this Card, You gain Celerity for Grey Cards Only",
+    "Rune": "CW",
+    "Colore": "Grigio/Bianco",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Plus 2 Defense to Any Hero, Until the end of Turn",
+    "Rune": "CG",
+    "Colore": "Grigio/Verde",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Plus 2 Defense to Any Hero, Until the end of Turn",
+    "Rune": "GG",
+    "Colore": "Verde",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Restore 2 Health Point to Any Hero",
+    "Rune": "GG",
+    "Colore": "Verde",
+    "Quantità": "1.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Plus 1 Defense to Any Hero, Until the end of Turn",
+    "Rune": "G",
+    "Colore": "Verde",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Your Equipped Hero uses it's Defense bonus instead of it's Attack bonus to determine Damage",
+    "Rune": "CWUG",
+    "Colore": "Grigio/Bianco/Blu/Verde",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": "Item"
+  },
+  {
+    "Nome": "",
+    "Effetto": "Plus 1 Magical Power to Equipped Hero, Your Equipped Hero uses it's Defense bonus instead of it's Attack bonus to determine Damage",
+    "Rune": "CWUG",
+    "Colore": "Grigio/Bianco/Blu/Verde",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": "Item"
+  },
+  {
+    "Nome": "",
+    "Effetto": "At the Beginning of Enchanted Hero's Turn, Plus 1 Defense to Enchanted Hero Until the end of Turn, Your Equipped Hero uses it's Defense bonus instead of it's Attack bonus to determine Damage Until the end of Turn",
+    "Rune": "WRRGG",
+    "Colore": "Rosso/Verde",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": "Enchant"
+  },
+  {
+    "Nome": "",
+    "Effetto": "Plus 1 Defense to Any Hero, Until the end of Turn, Chose a Player During the next Draw Phase they Draw 1[One] additional Card",
+    "Rune": "RG",
+    "Colore": "Rosso/Verde",
+    "Quantità": "1.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "If you are going First, Plus 3 Attack to Any Hero, Until the end of Turn, If the next Opponent's card on the Stack has less Runes than This one, Discard that card, it's effects are negated",
+    "Rune": "CBP",
+    "Colore": "Grigio/Nero/Viola",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Pisello",
+    "Rune": "",
+    "Colore": "",
+    "Quantità": "4.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "If you are going First, Minus 3 Defense to Any Hero, Until the end of Turn, If the next Opponent's card on the Stack has less Runes than This one, Discard that card, it's effects are negated",
+    "Rune": "CBP",
+    "Colore": "Grigio/Nero/Viola",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "If you are going First, Plus 3 Attack to Any Hero",
+    "Rune": "CP",
+    "Colore": "Grigio/Viola",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Minus 1 Attack to Any Hero, Until the end of turn, Minus 2 Defense to Any Hero, Until the end of Turn",
+    "Rune": "BP",
+    "Colore": "Nero/Viola",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "During the Card Selection Phase if you select this Card and you are going First, You gain Celerity, Chose if you want to go First or Second next Turn ",
+    "Rune": "UPP",
+    "Colore": "Viola",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "If you are going First, Plus 3 Attack to Any Hero, Chose if you want to go First or Second next Turn ",
+    "Rune": "CUPP",
+    "Colore": "Viola",
+    "Quantità": "2.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "During the Card Selection Phase if you select this Card and you are going First, You gain Celerity, Minus 1 Attack to Any Hero, Until the end of turn, Minus 2 Defense to Any Hero, Until the end of Turn",
+    "Rune": "BPP",
+    "Colore": "Viola",
+    "Quantità": "1.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "Plus 2 Attack to Any Hero, Until the end of Turn",
+    "Rune": "CW",
+    "Colore": "Grigio/Bianco",
+    "Quantità": "1.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "If you are going First, Minus 3 Defense to Any Hero, Chose if you want to go First or Second next Turn ",
+    "Rune": "CUPP",
+    "Colore": "Viola",
+    "Quantità": "1.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "",
+    "Effetto": "If you are going First, Minus 3 Defense to Any Hero",
+    "Rune": "CP",
+    "Colore": "Grigio/Viola",
+    "Quantità": "1.0",
+    "Note": "",
+    "Speciale": ""
+  },
+  {
+    "Nome": "Pugnale Viola/Purple Knife",
+    "Effetto": "Plus 2 Attack to Equipped Hero, If you are going First activates Immediately",
+    "Rune": "PP",
+    "Colore": "Viola",
+    "Quantità": "1.0",
+    "Note": "Non è considerato nella creazione del mazzo in quanto l'eroe Sly ne mischia una copia nel mazzo a inizio partita",
+    "Speciale": "Item"
+  }
+]
