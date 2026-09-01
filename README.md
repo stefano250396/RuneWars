@@ -72,9 +72,11 @@ Node.js è l'ambiente che permette di eseguire il progetto in locale.
    git clone https://github.com/TUO-UTENTE/rune-wars.git
    ```
    O più semplicemente clicca qua
+   
    <img width="475" height="263" alt="image" src="https://github.com/user-attachments/assets/a2f4c24a-0c7e-4e51-9637-787d3b8c6ed3" />
+
    e copia il link da usare direttamente dalla pagine di Github
-4. Entra nella cartella appena creata:
+5. Entra nella cartella appena creata:
    ```
    cd rune-wars
    ```
