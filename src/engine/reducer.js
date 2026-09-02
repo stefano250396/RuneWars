@@ -11,12 +11,11 @@ import { HEROES, FACTIONS } from '../data/heroes.js';
 import { createBrightDeck, createDarkDeck, PURPLE_KNIFE } from '../data/cards.js';
 import * as A from './actions.js';
 import {
-  parseEffects,
   getSelectionEffects,
   canPlayCard,
   checkAbilityCost,
-  applyEffectMut,
 } from './effects.js';
+import { resolveCard } from './effectHandlers.js';
 
 // ─── Fisher-Yates Shuffle ────────────────────────────────────────────────────
 
@@ -538,7 +537,11 @@ function resolveAbility(state, hero, ability, playerId, target) {
     const amberSword = {
       id: generateCardId(),
       name: 'Amber Sword-Axe',
-      effect: 'Plus 2 Attack to Equipped Hero. Uses Defense instead of Attack for Damage',
+      text: '+2 Attack to the equipped hero. It uses Defense instead of Attack for combat damage.',
+      effects: [
+        { type: 'buff', stat: 'attack', amount: 2, duration: 'turn', target: 'ownActive' },
+        { type: 'swapAttackDefense', target: 'ownActive' },
+      ],
       runes: { G: 2, W: 2 },
       runeStr: 'GGWW',
       runeCount: 4,
@@ -629,53 +632,8 @@ function handleResolveNextCard(state, payload) {
     }
   }
 
-  // ── Parse and apply each effect ─────────────────────────────────────
-  const effects = parseEffects(card);
-
-  for (let i = 0; i < effects.length; i++) {
-    const effect = effects[i];
-
-    // Skip selection-time effects (already handled during SELECT_CARDS)
-    if (effect.timing === 'selection') continue;
-    if (effect.type === 'unplayable') continue;
-
-    // Negate effect — set up for next opponent card (needs source card rune count)
-    if (effect.type === 'negate') {
-      s.negateNext = {
-        active: true,
-        sourcePlayerId: playerId,
-        sourceRuneCount: card.runeCount,
-      };
-      logs.push('Next opponent card with fewer runes will be negated.');
-      continue;
-    }
-
-    // Determine target hero
-    let targetId = null;
-    if (effect.target === 'self' || effect.target == null) {
-      // Self-targeting or effects with no explicit target default to own active hero
-      const hero = getActiveHeroForPlayer(s, playerId);
-      targetId = hero ? hero.instanceId : null;
-    }
-    if (effect.target === 'any' || effect.target === 'enemy') {
-      // Use UI-supplied target if available
-      targetId = targets?.[i] || null;
-      if (!targetId) {
-        // Smart default: buffs/heals → own hero, debuffs/damage → opponent hero
-        if (effect.type === 'buff' || effect.type === 'heal') {
-          const hero = getActiveHeroForPlayer(s, playerId);
-          targetId = hero ? hero.instanceId : null;
-        } else {
-          const opp = opponentOf(playerId);
-          const hero = getActiveHeroForPlayer(s, opp);
-          targetId = hero ? hero.instanceId : null;
-        }
-      }
-    }
-
-    const effectLogs = applyEffectMut(s, effect, targetId, playerId);
-    logs.push(...effectLogs);
-  }
+  // ── Resolve the card's effects (targeting/conditions/timing handled inside) ──
+  logs.push(...resolveCard(s, entry, targets || {}));
 
   s.cardResolveIndex++;
 

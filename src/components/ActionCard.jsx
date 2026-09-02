@@ -4,7 +4,7 @@ import React from 'react';
  * ActionCard - displays an action card in the player's hand.
  *
  * Props:
- *   card      — card object {id, name, effect, runes, runeStr, runeCount, colors, special}
+ *   card      — card object {id, name, text, effects, runes, runeStr, runeCount, colors, special}
  *   onClick   — click handler
  *   selected  — boolean, golden glow
  *   disabled  — boolean, greyed out
@@ -57,7 +57,7 @@ export default function ActionCard({
       </div>
 
       <div className="action-card__effect">
-        {card.effect}
+        {card.text}
       </div>
 
       {card.special && card.special !== 'pisello' && (

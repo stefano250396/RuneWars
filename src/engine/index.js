@@ -39,12 +39,14 @@ export {
 // Reducer
 export { gameReducer } from './reducer.js';
 
-// Effects utilities (for UI components that need to inspect cards)
+// Card inspection helpers (for UI components that need to read cards)
 export {
-  parseEffects,
+  getCardEffects,
   getSelectionEffects,
   canPlayCard,
   checkAbilityCost,
-  applyEffect,
-  applyEffectMut,
 } from './effects.js';
+
+// Effect resolution engine + schema
+export { resolveCard, EFFECT_HANDLERS, resolveTarget, checkCondition } from './effectHandlers.js';
+export { EFFECT_TYPES, TIMINGS, TARGETS, CONDITIONS } from './effectSchema.js';
