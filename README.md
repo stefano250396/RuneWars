@@ -1,3 +1,10 @@
+<p align="center">
+   
+   <img width="512" height="270" alt="Gemini_Generated_Image_u7dwzsu7dwzsu7dw" src="https://github.com/user-attachments/assets/1e58695b-e24c-4a1a-b64a-6b9d315fb083" />   
+   
+</p>
+
+
 # RuneWars
 
 Gioco da tavolo digitale RuneWars — prototipo interattivo in React.
