@@ -4,16 +4,13 @@
    
 </p>
 
-
-# RuneWars
-
-Gioco da tavolo digitale RuneWars — prototipo interattivo in React.
+Gioco da tavolo digitale RuneWars - prototipo interattivo in React.
 
 ---
 
 ## Requisiti prima di iniziare
 
-Questi sono i programmi che devi installare sul tuo PC. Segui gli step nell'ordine indicato.
+Questi sono i programmi che devi installare sul tuo PC per poter testare il gioco in locale. Segui gli step nell'ordine indicato.
 
 ---
 
