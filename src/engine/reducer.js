@@ -198,13 +198,13 @@ function handleDrawCards(state) {
     if (toDraw > 0) {
       const drawn = p.deck.splice(0, toDraw);
       p.hand.push(...drawn);
-      logs.push(`${p.name} draws ${toDraw} card(s). (${p.deck.length} left in deck)`);
+      logs.push(`${p.name} draws ${toDraw} card(s) → hand: [${p.hand.map(c => c.name).join(', ')}] (${p.deck.length} left in deck)`);
     } else {
-      logs.push(`${p.name}'s hand is already full.`);
+      logs.push(`${p.name}'s hand is already full: [${p.hand.map(c => c.name).join(', ')}]`);
     }
 
-    // Extra draw from previous-turn effects
-    const extra = Math.min(p.extraDraw || 0, p.deck.length);
+    // Extra draw from previous-turn effects (capped so hand never exceeds 4)
+    const extra = Math.min(p.extraDraw || 0, p.deck.length, Math.max(0, 4 - p.hand.length));
     if (extra > 0) {
       const drawn = p.deck.splice(0, extra);
       p.hand.push(...drawn);
@@ -367,18 +367,26 @@ function handleSelectCards(state, { playerId, cardIds }) {
 
   const logs = [];
   if (selectedCards.length === 0) {
-    logs.push(`${player.name} passes (no cards played).`);
+    logs.push(`${player.name} passes (no cards played). Hand: [${player.hand.map(c => c.name).join(', ') || 'empty'}]`);
   } else {
-    logs.push(`${player.name} selects ${selectedCards.length} card(s).`);
+    logs.push(`${player.name} plays: ${selectedCards.map(c => `${c.name} (${c.runeStr || '?'})`).join(', ')}`);
+    logs.push(`  → ${player.name} hand remaining: [${player.hand.map(c => c.name).join(', ') || 'empty'}]`);
     if (hasCelerity && !state.players[playerId].hasCelerity) {
       logs.push(`${player.name} gains Celerity!`);
     }
   }
 
   // Check if both players have selected
-  if (s.cardSelections.player1 !== null && s.cardSelections.player2 !== null) {
+  if (s.cardSelections?.player1 !== null && s.cardSelections?.player2 !== null) {
     s.phase = PHASES.ABILITY_CHECK;
+    const p1 = s.players.player1;
+    const p2 = s.players.player2;
+    const h1 = getActiveHeroForPlayer(s, 'player1');
+    const h2 = getActiveHeroForPlayer(s, 'player2');
     logs.push('Both players have selected cards. Checking abilities...');
+    logs.push(`  [State] Turn ${s.turn} | Round ${s.round} | First: ${s.players[s.turnFirstPlayerId].name}`);
+    if (h1) logs.push(`  [${p1.name}] ${h1.name} HP:${h1.currentHealth}/${h1.maxHealth} ATK:${h1.attack + h1.tempAttack} DEF:${h1.defense + h1.tempDefense} | deck:${p1.deck.length} hand:${p1.hand.length}`);
+    if (h2) logs.push(`  [${p2.name}] ${h2.name} HP:${h2.currentHealth}/${h2.maxHealth} ATK:${h2.attack + h2.tempAttack} DEF:${h2.defense + h2.tempDefense} | deck:${p2.deck.length} hand:${p2.hand.length}`);
   }
 
   addLog(s, ...logs);
@@ -673,6 +681,8 @@ function handleExecuteCombat(state) {
   }
 
   const logs = ['--- COMBAT ---'];
+  logs.push(`  [${hero1.name}] HP:${hero1.currentHealth}/${hero1.maxHealth} ATK:${hero1.attack + hero1.tempAttack} DEF:${hero1.defense + hero1.tempDefense}${hero1.useDefenseForAttack ? ' (uses DEF for dmg)' : ''}`);
+  logs.push(`  [${hero2.name}] HP:${hero2.currentHealth}/${hero2.maxHealth} ATK:${hero2.attack + hero2.tempAttack} DEF:${hero2.defense + hero2.tempDefense}${hero2.useDefenseForAttack ? ' (uses DEF for dmg)' : ''}`);
 
   // ── Token combat (tokens attack alongside their owner's hero) ───────
   for (const token of bf.tokens) {
@@ -783,10 +793,11 @@ function handleEndTurn(state) {
     }
   }
 
-  // ── Move played cards to discard, reset turn state ──────────────────
+  // ── Move played cards to discard (skip items - they stay equipped) ────
   for (const pid of ['player1', 'player2']) {
     const p = s.players[pid];
-    p.discard.push(...p.playedCards);
+    const nonItems = p.playedCards.filter(c => c.special !== 'item');
+    p.discard.push(...nonItems);
     p.playedCards = [];
     p.hasCelerity = false;
     p.cardsPlayedThisTurn = 0;
@@ -903,6 +914,13 @@ function handleNextTurn(state) {
   s.activePlayerId = s.turnFirstPlayerId;
   s.turn++;
   s.phase = PHASES.DRAW;
+
+  // Log state summary before next turn begins
+  for (const pid of ['player1', 'player2']) {
+    const p = s.players[pid];
+    logs.push(`  [${p.name}] hand:${p.hand.length} [${p.hand.map(c => c.name).join(', ') || 'empty'}] deck:${p.deck.length} discard:${p.discard.length}`);
+  }
+  logs.push(`  Next turn: Turn ${s.turn} | Round ${s.round} | First: ${s.players[s.turnFirstPlayerId].name}`);
 
   // Clean up transient state
   delete s.cardSelections;

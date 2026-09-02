@@ -146,6 +146,27 @@ export default function PhaseOverlay({ type, data = {}, onDismiss, autoClose = 0
           </>
         );
 
+      case 'polarity':
+        return (
+          <>
+            <div className="phase-overlay__icon">&#x2194;</div>
+            <div className="phase-overlay__title phase-overlay__title--gold">
+              {data.playerName}, Choose Initiative
+            </div>
+            <div className="phase-overlay__subtitle">
+              A Polarity card was played. Do you want to go first or second next turn?
+            </div>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem' }}>
+              <button className="btn btn--primary btn--large" onClick={data.onChooseFirst}>
+                Go First
+              </button>
+              <button className="btn btn--secondary btn--large" onClick={data.onChooseSecond}>
+                Go Second
+              </button>
+            </div>
+          </>
+        );
+
       case 'custom':
         return (
           <>

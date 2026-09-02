@@ -232,5 +232,14 @@ export function resolveCard(state, { playerId, card }, uiTargets = {}) {
     }
   }
 
+  if (card.special === 'item') {
+    const hero = getActiveHero(state, playerId);
+    if (hero) {
+      if (!hero.items) hero.items = [];
+      hero.items.push(card);
+      log(`${hero.name} equips ${card.name}`);
+    }
+  }
+
   return logs;
 }

@@ -26,11 +26,13 @@ export default function HeroCard({
   const maxHp = hero.maxHealth ?? hero.health ?? 1;
   const hpPercent = Math.max(0, Math.min(100, (hp / maxHp) * 100));
 
-  const atk = (hero.currentAttack ?? hero.attack ?? 0) + (hero.tempAttack ?? 0);
+  const atk = hero.useDefenseForAttack
+    ? (hero.currentDefense ?? hero.defense ?? 0) + (hero.tempDefense ?? 0)
+    : (hero.currentAttack ?? hero.attack ?? 0) + (hero.tempAttack ?? 0);
   const def = (hero.currentDefense ?? hero.defense ?? 0) + (hero.tempDefense ?? 0);
   const mag = (hero.currentMagicPower ?? hero.magicPower ?? 0) + (hero.tempMagicPower ?? 0);
 
-  const baseAtk = hero.attack ?? 0;
+  const baseAtk = hero.useDefenseForAttack ? (hero.defense ?? 0) : (hero.attack ?? 0);
   const baseDef = hero.defense ?? 0;
   const baseMag = hero.magicPower ?? 0;
 
@@ -79,7 +81,7 @@ export default function HeroCard({
             <span className={`hero-stat__value ${atk > baseAtk ? 'hero-stat__value--buffed' : ''}`}>
               {atk}
             </span>
-            <span className="hero-stat__label">ATK</span>
+            <span className="hero-stat__label">{hero.useDefenseForAttack ? 'DEF→ATK' : 'ATK'}</span>
           </div>
           <div className="hero-stat">
             <span className="hero-stat__icon">&#x1F6E1;</span>
@@ -119,11 +121,20 @@ export default function HeroCard({
       {/* Items & Enchantments */}
       {(hero.items?.length > 0 || hero.enchantments?.length > 0) && (
         <div className="hero-card__items">
-          {hero.items?.map((item, i) => (
-            <span key={`item-${i}`} className="hero-item-badge" title={item.name || item}>
-              {typeof item === 'string' ? item : item.name || 'Item'}
-            </span>
-          ))}
+          {hero.items?.map((item, i) => {
+            const itemTitle = typeof item === 'string'
+              ? item
+              : `${item.name}\n\nRunes: ${item.runeStr || '?'}\n${item.description || ''}`;
+            return (
+              <span
+                key={`item-${i}`}
+                className="hero-item-badge"
+                title={itemTitle}
+              >
+                ⚔️ {typeof item === 'string' ? item : item.name || 'Item'}
+              </span>
+            );
+          })}
           {hero.enchantments?.map((enc, i) => (
             <span key={`enc-${i}`} className="hero-enchant-badge" title={enc.name || enc}>
               {typeof enc === 'string' ? enc : enc.name || 'Enchant'}

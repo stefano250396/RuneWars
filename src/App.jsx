@@ -3,6 +3,7 @@ import './styles/game.css';
 
 import { createInitialState, PHASES } from './engine/gameState.js';
 import { gameReducer } from './engine/reducer.js';
+import { getSelectionEffects, canPlayCard } from './engine/effects.js';
 
 import FactionSelect from './components/FactionSelect.jsx';
 import GameBoard from './components/GameBoard.jsx';
@@ -225,16 +226,46 @@ export default function App() {
   }, [placementStep, selectedHeroId, safeDispatch, state.players]);
 
   // ── Card selection ──
+  const computeMaxCards = useCallback((currentSelectedIds, hand, playerId) => {
+    const player = state.players?.[playerId];
+    if (player?.hasCelerity) return 2;
+
+    const selectedCards = (hand || []).filter(c => currentSelectedIds.includes(c.id));
+    for (const c of selectedCards) {
+      for (const eff of getSelectionEffects(c)) {
+        if (eff.type !== 'celerity') continue;
+        if (eff.condition === 'goingFirst' && state.turnFirstPlayerId !== playerId) continue;
+        if (eff.condition === 'goingSecond' && state.turnFirstPlayerId === playerId) continue;
+        return 2;
+      }
+    }
+
+    // Doran passive: selecting an item grants celerity
+    const bf = state.battlefields?.[state.activeBattlefield];
+    const heroInstanceId = bf?.[`${playerId}Hero`];
+    const hero = resolveHero(heroInstanceId);
+    if (hero?.id === 'doran' && selectedCards.some(c => c.special === 'item')) return 2;
+
+    return 1;
+  }, [state.players, state.turnFirstPlayerId, state.battlefields, state.activeBattlefield]);
+
   const handleCardClick = useCallback((card) => {
     if (!cardSelectStep || cardSelectStep.phase !== 'selecting') return;
+    const playerId = cardSelectStep.playerId;
+    const hand = state.players?.[playerId]?.hand || [];
     setSelectedCardIds(prev => {
       if (prev.includes(card.id)) return prev.filter(id => id !== card.id);
-      const player = state.players?.[cardSelectStep.playerId];
-      const maxCards = player?.hasCelerity ? 2 : 1;
+      // Block cards the active hero cannot play
+      const bf = state.battlefields?.[state.activeBattlefield];
+      const heroInstanceId = bf?.[`${playerId}Hero`];
+      const hero = resolveHero(heroInstanceId);
+      if (hero && !canPlayCard(card, hero)) return prev;
+      const nextIds = [...prev, card.id];
+      const maxCards = computeMaxCards(nextIds, hand, playerId);
       if (prev.length >= maxCards) return [...prev.slice(0, maxCards - 1), card.id];
-      return [...prev, card.id];
+      return nextIds;
     });
-  }, [cardSelectStep, state.players]);
+  }, [cardSelectStep, state.players, state.battlefields, state.activeBattlefield, computeMaxCards]);
 
   const handleConfirmCards = useCallback(() => {
     if (!cardSelectStep) return;
@@ -308,9 +339,37 @@ export default function App() {
       });
     } else {
       setDiscardStep(null);
-      safeDispatch({ type: 'NEXT_TURN' });
+      if (state.polarityHolder) {
+        const holderPid = state.polarityHolder;
+        const holderName = state.players?.[holderPid]?.name || 'Player';
+        setOverlay({
+          type: 'pass-device',
+          data: { playerName: holderName },
+          onDismiss: () => {
+            setViewingPlayer(holderPid);
+            setOverlay({
+              type: 'polarity',
+              data: {
+                playerName: holderName,
+                onChooseFirst: () => {
+                  setOverlay(null);
+                  safeDispatch({ type: 'CHOOSE_INITIATIVE', payload: { playerId: holderPid, wantsFirst: true } });
+                  safeDispatch({ type: 'NEXT_TURN' });
+                },
+                onChooseSecond: () => {
+                  setOverlay(null);
+                  safeDispatch({ type: 'CHOOSE_INITIATIVE', payload: { playerId: holderPid, wantsFirst: false } });
+                  safeDispatch({ type: 'NEXT_TURN' });
+                },
+              },
+            });
+          },
+        });
+      } else {
+        safeDispatch({ type: 'NEXT_TURN' });
+      }
     }
-  }, [discardStep, safeDispatch, state.players]);
+  }, [discardStep, safeDispatch, state.players, state.polarityHolder]);
 
   const handleFinishPlacement = useCallback(() => {
     setPlacementStep(null);
