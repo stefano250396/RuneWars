@@ -114,17 +114,10 @@ export default function ControlsArea({
   );
 
   // Detect celerity dynamically from currently selected cards (allows selecting 2nd card live)
-  const currentSelectingPlayerId = state?.cardSelections !== undefined
-    ? (state.cardSelections?.player1 === null ? 'player1' : 'player2')
-    : null;
+  // NOTE: ignore conditions here — cards CAN be selected even if their conditional effects don't trigger
   const hasCelerityFromCards = selectedCards.some(card => {
     const effects = getSelectionEffects(card);
-    return effects.some(e => {
-      if (e.type !== 'celerity') return false;
-      if (e.condition === 'goingFirst' && state?.turnFirstPlayerId !== currentSelectingPlayerId) return false;
-      if (e.condition === 'goingSecond' && state?.turnFirstPlayerId === currentSelectingPlayerId) return false;
-      return true;
-    });
+    return effects.some(e => e.type === 'celerity');
   });
   const effectiveMaxSelections = (currentPlayer?.hasCelerity || hasCelerityFromCards) ? 2 : 1;
 
