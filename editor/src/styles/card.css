@@ -1,0 +1,150 @@
+/* ============================================================
+   CARD VISUALS — extracted from the game's src/styles/game.css
+   (.action-card* / .rune-pip*). Keep in sync manually.
+   ============================================================ */
+
+:root {
+  --bg-card: #1a1a35;
+  --border-subtle: #2a2a50;
+  --border-glow: #f0c040;
+
+  --text-primary: #e8e8f0;
+  --text-secondary: #a0a0c0;
+  --text-muted: #6a6a8a;
+
+  --rune-W: #f0c040;
+  --rune-U: #3b82f6;
+  --rune-B: #1a1a2e;
+  --rune-R: #ef4444;
+  --rune-G: #22c55e;
+  --rune-P: #a855f7;
+  --rune-C: #9ca3af;
+
+  --card-width: 200px;
+  --card-height: 220px;
+
+  --transition-normal: 0.25s ease;
+}
+
+.action-card {
+  width: var(--card-width);
+  height: var(--card-height);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.action-card:hover {
+  filter: brightness(1.18);
+  box-shadow: 0 0 18px rgba(160, 160, 255, 0.35);
+  z-index: 10;
+}
+
+.action-card--selected {
+  border-color: var(--border-glow) !important;
+  box-shadow: 0 0 16px rgba(240, 192, 64, 0.5), 0 0 40px rgba(240, 192, 64, 0.2);
+}
+
+.action-card--color-P { border-color: var(--rune-P); }
+.action-card--color-G { border-color: var(--rune-G); }
+.action-card--color-W { border-color: var(--rune-W); }
+.action-card--color-U { border-color: var(--rune-U); }
+.action-card--color-R { border-color: var(--rune-R); }
+.action-card--color-B { border-color: #555; }
+.action-card--color-C { border-color: var(--rune-C); }
+
+.action-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.action-card__name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.action-card__runes {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: 80px;
+}
+
+.rune-pip {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.rune-pip--W { background: var(--rune-W); color: #000; }
+.rune-pip--U { background: var(--rune-U); color: #fff; }
+.rune-pip--B { background: var(--rune-B); color: #fff; border-color: #555; }
+.rune-pip--R { background: var(--rune-R); color: #fff; }
+.rune-pip--G { background: var(--rune-G); color: #000; }
+.rune-pip--P { background: var(--rune-P); color: #fff; }
+.rune-pip--C { background: var(--rune-C); color: #000; }
+
+.action-card__effect {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  overflow: hidden;
+}
+
+.action-card__special {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.action-card__special--item {
+  background: rgba(240, 192, 64, 0.2);
+  color: var(--rune-W);
+  border: 1px solid rgba(240, 192, 64, 0.3);
+}
+
+.action-card__special--enchant {
+  background: rgba(168, 85, 247, 0.2);
+  color: var(--rune-P);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.action-card__special--pisello {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--rune-R);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* editor-only: modifier modules */
+.action-card__special--modifier {
+  background: rgba(59, 130, 246, 0.18);
+  color: var(--rune-U);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}

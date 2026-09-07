@@ -1,0 +1,33 @@
+name,slot,cost,kind,effect,stat,amount,scaler,target,condition,timing,token,mod_target,mod_op,extra,notes
+Block,1,G,spell,buff,defense,1,,any,,,,,,,
+Harden,1,GG,spell,buff,defense,2,,any,,,,,,,
+Stone Skin,1,GGG,spell,buff,defense,3,,any,,,,,,,
+Mend,1,G,spell,heal,,1,,any,,,,,,,
+Heal,1,GG,spell,heal,,2,,any,,,,,,,
+Sear,1,R,spell,damage,,1,,any,,,,,,"{""kind"":""magic""}",
+Burn,1,RR,spell,damage,,2,,any,,,,,,"{""kind"":""magic""}",
+Scorch,1,RRR,spell,damage,,3,,any,,,,,,"{""kind"":""magic""}",
+Nick,1,P,spell,debuff,defense,1,,any,,,,,,,
+Tear,1,PP,spell,debuff,defense,2,,any,,,,,,,
+Sharpen Blade,1,W,spell,buff,attack,1,,any,,,,,,,
+Charge,1,WW,spell,buff,attack,2,,any,,,,,,,
+Weakness,1,B,spell,debuff,attack,1,,any,,,,,,,
+Bad Juju,1,BB,spell,healthLoss,,2,,any,,,,,,,
+Mossy Salve,1,CG,spell,heal,,1,,any,activeHeroAboveHalf,,,,,,
+Mossy Salve,2,,,heal,,2,,any,activeHeroHalfOrLess,,,,,,ramo alternativo
+Assembly the Legion,1,W,spell,token,,,,activeBattlefield,,,White Legionnaire 1/1,,,,
+Vegetation Shield,1,WG,spell,buff,defense,0,magicPower,any,,,,,,,bonus tutto dinamico
+Smoldering Roots,1,RG,spell,damage,,0,magicPower,any,,,,,,"{""kind"":""magic""}",
+Trained Reflexes,1,P,spell,celerity,,,,none,goingFirst,,,,,,
+Blackmail,1,B,spell,negate,,,,none,,,,,,"{""mode"":""fewerRunes""}",
+Haze,1,CU,spell,negateStats,,,,enemyActive,goingSecond,,,,,,
+Polarity Shift,1,UP,spell,polarity,,,,none,,,,,,,
+Borrowed Scroll,1,RR,spell,draw,,1,,none,,,,,,,
+Blood Moon,1,BRR,spell,damage,,1,,allHeroes,,,,,,"{""kind"":""magic""}",
+Combat Ready,1,CCCC,spell,buff,attack,2,,any,,,,,,,
+Combat Ready,2,,,buff,defense,2,,any,,,,,,,
+Ray of Judgement,1,BRP,spell,damage,,2,,any,,,,,,"{""kind"":""magic""}",
+Ray of Judgement,2,,,damage,,1,,anyOther,,,,,,"{""kind"":""magic""}",eroe diverso dal primo
+Ray of Judgement,3,,,celerity,,,,none,enemyActiveHalfOrLess,selection,,,,,
+Infuse Power,1,RR,modifier,,,,,,,,,spell,addScaler:amount:magicPower,,punta a un numero e aggiunge + Potere Magico
+Parry,1,C,modifier,,,,,,,,,spell,addFlat:defense:1,,una sola per carta
