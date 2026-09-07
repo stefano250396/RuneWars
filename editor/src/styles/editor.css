@@ -41,6 +41,9 @@ button {
   transition: border-color 0.15s, background 0.15s;
 }
 button:hover { border-color: var(--ed-accent); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+button.danger { color: #ff9a9a; }
+button.danger:hover:not(:disabled) { border-color: var(--ed-danger); }
 button:focus-visible, input:focus-visible, select:focus-visible {
   outline: 2px solid var(--ed-accent);
   outline-offset: 1px;

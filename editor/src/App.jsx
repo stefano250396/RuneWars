@@ -37,6 +37,7 @@ export default function App() {
   const [kindFilter, setKindFilter] = useState('');
   const [colorFilter, setColorFilter] = useState('');
   const [selectedId, setSelectedId] = useState(null);
+  const [confirmClear, setConfirmClear] = useState(false);
 
   useEffect(() => {
     try {
@@ -188,6 +189,22 @@ export default function App() {
           >
             Ripristina esempio
           </button>
+          <button
+            type="button"
+            className="danger"
+            disabled={modules.length === 0}
+            onClick={() => {
+              if (modules.length === 0) return;
+              if (!confirmClear) { setConfirmClear(true); return; }
+              setCsvText('');
+              setSource('vuoto');
+              setSelectedId(null);
+              setConfirmClear(false);
+            }}
+            onBlur={() => setConfirmClear(false)}
+          >
+            {confirmClear ? `Conferma — cancella ${modules.length} carte` : 'Svuota'}
+          </button>
           <span className="src">sorgente: {source}</span>
         </div>
 
@@ -220,7 +237,11 @@ export default function App() {
       <div className="editor__body">
         <div className="grid">
           {filtered.length === 0 && (
-            <div className="grid__empty">Nessun modulo corrisponde ai filtri.</div>
+            <div className="grid__empty">
+              {modules.length === 0
+                ? 'Nessun modulo caricato. Usa "Carica CSV…", "Incolla CSV" o "Ripristina esempio".'
+                : 'Nessun modulo corrisponde ai filtri.'}
+            </div>
           )}
           {filtered.map((card) => (
             <ActionCard
