@@ -13,7 +13,11 @@ const LS_SRC = 'rw-editor-src';
 function loadInitial() {
   try {
     const saved = localStorage.getItem(LS_KEY);
-    if (saved) return { text: saved, src: localStorage.getItem(LS_SRC) || 'CSV salvato' };
+    // saved === null  -> nothing stored yet, fall back to the sample.
+    // saved === ''     -> the user cleared it on purpose, keep it empty.
+    if (saved !== null) {
+      return { text: saved, src: localStorage.getItem(LS_SRC) || (saved ? 'CSV salvato' : 'vuoto') };
+    }
   } catch { /* ignore */ }
   return { text: sampleCsv, src: 'sample-modules.csv' };
 }
@@ -37,7 +41,7 @@ export default function App() {
   const [kindFilter, setKindFilter] = useState('');
   const [colorFilter, setColorFilter] = useState('');
   const [selectedId, setSelectedId] = useState(null);
-  const [confirmClear, setConfirmClear] = useState(false);
+  const [lastCsv, setLastCsv] = useState(null); // snapshot for "Annulla svuota"
 
   useEffect(() => {
     try {
@@ -192,19 +196,24 @@ export default function App() {
           <button
             type="button"
             className="danger"
-            disabled={modules.length === 0}
+            disabled={csvText.trim() === ''}
             onClick={() => {
-              if (modules.length === 0) return;
-              if (!confirmClear) { setConfirmClear(true); return; }
+              setLastCsv(csvText);
               setCsvText('');
               setSource('vuoto');
               setSelectedId(null);
-              setConfirmClear(false);
             }}
-            onBlur={() => setConfirmClear(false)}
           >
-            {confirmClear ? `Conferma — cancella ${modules.length} carte` : 'Svuota'}
+            Svuota
           </button>
+          {lastCsv !== null && csvText.trim() === '' && (
+            <button
+              type="button"
+              onClick={() => { setCsvText(lastCsv); setSource('ripristinato'); setLastCsv(null); }}
+            >
+              Annulla svuota
+            </button>
+          )}
           <span className="src">sorgente: {source}</span>
         </div>
 
