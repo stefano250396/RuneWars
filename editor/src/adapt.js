@@ -33,6 +33,9 @@ export function heroToCard(hero) {
     attack: hero.attack,
     defense: hero.defense,
     magicPower: hero.magicPower,
+    runePool: hero.runePool,
+    items: hero.items,
+    enchants: hero.enchants,
     abilitySummary: describeHero(hero),
     _hero: hero,
   };

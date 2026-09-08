@@ -6,7 +6,7 @@ import React from 'react';
  * Keep in sync manually if the game's markup changes.
  *
  * Props: hero { name, color, health, maxHealth, attack, defense, magicPower,
- *               abilitySummary? }, onClick, selected
+ *               runePool?, items?, enchants?, abilitySummary? }, onClick, selected
  */
 export default function HeroCard({ hero, onClick, selected = false }) {
   if (!hero) return null;
@@ -53,6 +53,24 @@ export default function HeroCard({ hero, onClick, selected = false }) {
           <span className="hero-stat__label">MAG</span>
         </div>
       </div>
+
+      {hero.runePool && Object.keys(hero.runePool).length > 0 && (
+        <div className="hero-card__pool" title="Pool rune per la costruzione del mazzo">
+          {Object.entries(hero.runePool).map(([k, n]) => (
+            <span key={k} className="hero-card__pool-rune">
+              <span className={`rune-pip rune-pip--${k}`} title={k}>{k}</span>
+              <span className="hero-card__pool-n">{n}</span>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {(hero.items > 0 || hero.enchants > 0) && (
+        <div className="hero-card__slots">
+          {hero.items > 0 && <span className="hero-slot hero-slot--item" title="slot oggetti">Item ×{hero.items}</span>}
+          {hero.enchants > 0 && <span className="hero-slot hero-slot--enchant" title="slot incantesimi">Ench ×{hero.enchants}</span>}
+        </div>
+      )}
 
       {hero.abilitySummary && (
         <div className="hero-card__abilities">

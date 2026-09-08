@@ -109,6 +109,56 @@
   letter-spacing: 1px;
 }
 
+.hero-card__pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 7px;
+  justify-content: center;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.hero-card__pool-rune {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.hero-card__pool .rune-pip {
+  width: 15px;
+  height: 15px;
+  font-size: 0.5rem;
+}
+.hero-card__pool-n {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-card__slots {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hero-slot {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.hero-slot--item {
+  background: rgba(240, 192, 64, 0.15);
+  color: var(--rune-W);
+  border: 1px solid rgba(240, 192, 64, 0.3);
+}
+.hero-slot--enchant {
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--rune-P);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
 .hero-card__abilities {
   padding-top: 5px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
