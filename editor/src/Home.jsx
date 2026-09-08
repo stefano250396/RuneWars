@@ -14,8 +14,7 @@ const CHOICES = [
   {
     id: 'decks',
     title: 'Gestore Mazzi',
-    desc: 'Componi i mazzi a partire da carte ed eroi.',
-    soon: true,
+    desc: 'Naviga la collezione dei mazzi e le loro informazioni.',
   },
 ];
 

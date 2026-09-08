@@ -480,3 +480,121 @@ input::placeholder { color: var(--ed-text-faint); }
 .ability-block__cost { display: inline-flex; gap: 3px; margin-left: auto; }
 
 .tablewrap-x { overflow-x: auto; }
+
+/* ── Gestore Mazzi ───────────────────────────────────────── */
+
+.btn-primary {
+  background: var(--ed-accent);
+  color: #1a1305;
+  border-color: var(--ed-accent);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:disabled { opacity: 0.5; }
+
+.soon-tag {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.editor__nav .btn-primary { margin-left: auto; }
+
+.collection {
+  flex: 1;
+  padding: 24px;
+}
+.collection__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ed-text-faint);
+  margin: 0 0 14px;
+}
+.collection__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 260px));
+  gap: 16px;
+}
+
+.deck-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  padding: 16px 18px;
+  min-height: 120px;
+  background: var(--ed-surface);
+  border: 1px solid var(--ed-border);
+  border-radius: 10px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.deck-card:hover {
+  border-color: var(--ed-accent);
+  transform: translateY(-2px);
+}
+.deck-card--on {
+  border-color: var(--ed-accent);
+  box-shadow: 0 0 0 1px var(--ed-accent);
+}
+.deck-card__name {
+  font-size: 1rem;
+  font-weight: 700;
+}
+.deck-card__heroes {
+  display: flex;
+  gap: 4px;
+}
+.deck-card__meta {
+  font-size: 0.72rem;
+  color: var(--ed-text-faint);
+  margin-top: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-chip {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
+  flex-shrink: 0;
+}
+
+.deck-heroes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.deck-heroes li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(42, 42, 80, 0.5);
+  font-size: 0.88rem;
+}
+.deck-heroes__name { flex: 1; }
+.deck-heroes__color {
+  font-family: ui-monospace, monospace;
+  font-size: 0.72rem;
+  color: var(--ed-text-faint);
+}
+
+.deck-note {
+  font-size: 0.86rem;
+  color: var(--ed-text-dim);
+  line-height: 1.55;
+  margin: 0;
+}
