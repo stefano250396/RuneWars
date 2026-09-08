@@ -39,6 +39,13 @@ export default function DecksView({ onHome }) {
 
   const selected = decks.find((d) => d.id === selectedId) || null;
 
+  const deleteDeck = (id) => {
+    const next = decks.filter((d) => d.id !== id);
+    setDecks(next);
+    persistDecks(next);
+    setSelectedId(null);
+  };
+
   const saveDeck = ({ name, color, heroes: heroList, totals }) => {
     const deck = {
       id: `${slugId(name, 'mazzo')}-${Date.now().toString(36)}`,
@@ -107,13 +114,20 @@ export default function DecksView({ onHome }) {
           </div>
         </div>
 
-        {selected && <DeckDetail deck={selected} onClose={() => setSelectedId(null)} />}
+        {selected && (
+          <DeckDetail
+            deck={selected}
+            onClose={() => setSelectedId(null)}
+            onDelete={() => deleteDeck(selected.id)}
+          />
+        )}
       </div>
     </>
   );
 }
 
-function DeckDetail({ deck, onClose }) {
+function DeckDetail({ deck, onClose, onDelete }) {
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const totalRunes = deck.runeTotals && Object.keys(deck.runeTotals).length > 0;
   return (
     <aside className="detail">
@@ -167,9 +181,19 @@ function DeckDetail({ deck, onClose }) {
         </>
       )}
 
-      <button type="button" className="btn-primary" disabled title="funzione in arrivo" style={{ marginTop: 18 }}>
-        Modifica mazzo <span className="soon-tag">in arrivo</span>
-      </button>
+      <div className="detail__foot">
+        <button type="button" className="btn-primary" disabled title="funzione in arrivo">
+          Modifica mazzo <span className="soon-tag">in arrivo</span>
+        </button>
+        <button
+          type="button"
+          className="danger"
+          onClick={() => (confirmDelete ? onDelete() : setConfirmDelete(true))}
+          onBlur={() => setConfirmDelete(false)}
+        >
+          {confirmDelete ? 'Conferma eliminazione' : 'Elimina mazzo'}
+        </button>
+      </div>
     </aside>
   );
 }
