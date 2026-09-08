@@ -1,10 +1,10 @@
-# Rune Wars — Card Editor
+# Rune Wars — Editor
 
-Tool standalone: importa il **database dei moduli** da un CSV e lo sfoglia come carte
-in stile gioco, con ricerca e filtri.
+Tool standalone: importa da CSV il **database dei moduli** e le **schede eroe** e li
+sfoglia in stile gioco, con ricerca e filtri. Due viste, switch "Moduli" / "Eroi" in cima.
 
 Non è collegato al gioco: è un'app Vite + React separata, con il proprio
-`package.json`. La parte visiva della carta (`ActionCard`, `card.css`) è una
+`package.json`. La parte visiva (`ActionCard`, `HeroCard`, i CSS relativi) è una
 **copia** di quella del gioco — se cambia lì, va riallineata qui a mano.
 
 ## Avvio
@@ -54,17 +54,33 @@ Ray of Judgement,3,,,celerity,,,,none,enemyActiveHalfOrLess,selection,,,,,
 I problemi nel CSV (tipo effetto sconosciuto, campo obbligatorio mancante, ecc.)
 compaiono in un banner in cima, con il numero di riga.
 
+## CSV eroi (`sample-heroes.csv`)
+
+Un file, righe raggruppate per `name`. Statistiche + le 7 colonne rune-pool
+(🟡=W 🔵=U ⚫=B 🔴=R 🟢=G ⚪=C 🟣=P) solo sulla **prima riga** dell'eroe; le righe
+successive hanno `name` vuoto. `ability` = `1`/`2`/`3`… ripetuta su ogni riga della
+sua abilità; `ability name`/`ability cost` solo sulla prima riga del gruppo.
+**Con `ability cost` → attiva, senza → passiva.** `scaler` e `condition` accettano
+più valori separati da spazio. Colonne effetto identiche a quelle dei moduli, più
+`duration` (`turn`/`permanent`/`always`) e un `timing` esteso alle fasi
+(`preGame`, `placement`, `endTurn`, `always`, …).
+
 ## Struttura
 
 ```
 src/
-  App.jsx          UI (toolbar, griglia, pannello dettaglio)
+  App.jsx          shell + switch Moduli / Eroi
+  ModulesView.jsx  vista moduli (toolbar, griglia, dettaglio)
+  HeroesView.jsx   vista eroi
   csv.js           parser CSV
-  modules.js       CSV → moduli + validazione (vocabolario degli enum qui)
+  vocab.js         vocabolario degli enum (condiviso)
+  effect.js        una riga CSV → un oggetto effetto (condiviso)
+  modules.js       CSV → moduli + validazione
+  heroes.js        CSV → eroi + validazione
   describe.js      testo italiano degli effetti
-  adapt.js         modulo → shape per <ActionCard>
+  adapt.js         modulo/eroe → shape per <ActionCard> / <HeroCard>
   runes.js         helper rune (copia da src/data/cards.js del gioco)
-  components/ActionCard.jsx   copia da src/components/ del gioco
-  styles/card.css  copia degli stili .action-card / .rune-pip del gioco
-  styles/editor.css  layout del tool
+  useCsvSource.js  hook: stato CSV + localStorage + carica/svuota/annulla
+  components/       ActionCard, HeroCard (copie dal gioco), CsvLoaderBar, ErrorBanner
+  styles/          card.css, hero-card.css (copie dal gioco), editor.css
 ```

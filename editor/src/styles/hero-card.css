@@ -1,0 +1,129 @@
+/* ============================================================
+   HERO CARD VISUALS — extracted from the game's src/styles/game.css
+   (.hero-card* / .hero-stat* / .portrait-bg-*). Keep in sync manually.
+   ============================================================ */
+
+:root {
+  --hp-high: #22c55e;
+  --hp-mid: #eab308;
+  --hp-low: #ef4444;
+}
+
+.hero-card {
+  width: 150px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: all var(--transition-normal);
+  position: relative;
+  cursor: default;
+}
+
+.hero-card--clickable { cursor: pointer; }
+.hero-card--clickable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.hero-card--selected {
+  border-color: var(--border-glow) !important;
+  box-shadow: 0 0 16px rgba(240, 192, 64, 0.4), 0 0 32px rgba(240, 192, 64, 0.15);
+}
+
+.hero-card--color-P { border-color: var(--rune-P); }
+.hero-card--color-G { border-color: var(--rune-G); }
+.hero-card--color-W { border-color: var(--rune-W); }
+.hero-card--color-U { border-color: var(--rune-U); }
+.hero-card--color-R { border-color: var(--rune-R); }
+.hero-card--color-B { border-color: #444; }
+.hero-card--color-C { border-color: var(--rune-C); }
+
+.hero-card__portrait {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.85);
+  position: relative;
+  overflow: hidden;
+}
+.hero-card__portrait::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+}
+
+.hero-card__name {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.hero-card__hp-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.hero-card__hp-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width var(--transition-normal), background var(--transition-normal);
+}
+.hero-card__hp-text {
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.hero-card__stats {
+  display: flex;
+  justify-content: space-around;
+  gap: 4px;
+}
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.hero-stat__icon { font-size: 0.9rem; }
+.hero-stat__value { font-size: 0.9rem; font-weight: 700; }
+.hero-stat__label {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-card__abilities {
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.hero-ability {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.portrait-bg-P { background: linear-gradient(135deg, #6d28d9, #4c1d95); }
+.portrait-bg-G { background: linear-gradient(135deg, #15803d, #064e3b); }
+.portrait-bg-C { background: linear-gradient(135deg, #4b5563, #1f2937); }
+.portrait-bg-W { background: linear-gradient(135deg, #b45309, #78350f); }
+.portrait-bg-U { background: linear-gradient(135deg, #1d4ed8, #1e3a5f); }
+.portrait-bg-R { background: linear-gradient(135deg, #b91c1c, #7f1d1d); }
+.portrait-bg-B { background: linear-gradient(135deg, #1e1e3a, #0a0a1a); }
