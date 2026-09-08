@@ -16,7 +16,7 @@ function letterCounts(str) {
   return c;
 }
 
-export default function ModulesView() {
+export default function ModulesView({ onHome }) {
   const src = useCsvSource('rw-editor-modules', sampleCsv, 'sample-modules.csv');
   const [pasteOpen, setPasteOpen] = useState(false);
 
@@ -72,6 +72,10 @@ export default function ModulesView() {
   return (
     <>
       <header className="editor__header">
+        <div className="editor__nav">
+          <button type="button" className="crumb" onClick={onHome}>← Editor</button>
+          <span className="editor__section">Database Carte</span>
+        </div>
         <div className="toolbar">
           <label className="grow">
             Cerca nome

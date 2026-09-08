@@ -10,7 +10,7 @@ import { describeEffect } from './describe.js';
 import { RUNE_LETTERS, RUNE_NAMES } from './runes.js';
 import sampleCsv from '../sample-heroes.csv?raw';
 
-export default function HeroesView() {
+export default function HeroesView({ onHome }) {
   const src = useCsvSource('rw-editor-heroes', sampleCsv, 'sample-heroes.csv');
   const [pasteOpen, setPasteOpen] = useState(false);
 
@@ -49,6 +49,10 @@ export default function HeroesView() {
   return (
     <>
       <header className="editor__header">
+        <div className="editor__nav">
+          <button type="button" className="crumb" onClick={onHome}>← Editor</button>
+          <span className="editor__section">Database Eroi</span>
+        </div>
         <div className="toolbar">
           <label className="grow">
             Cerca nome
