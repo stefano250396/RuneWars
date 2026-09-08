@@ -598,3 +598,129 @@ input::placeholder { color: var(--ed-text-faint); }
   line-height: 1.55;
   margin: 0;
 }
+
+/* ── Deck creation ───────────────────────────────────────── */
+
+.editor__section-sub {
+  font-weight: 400;
+  color: var(--ed-text-faint);
+  font-size: 0.82rem;
+}
+
+.colorpick {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 200px));
+  gap: 16px;
+  padding: 48px 24px;
+  align-content: center;
+  justify-content: center;
+}
+.colorpick__btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 26px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: var(--ed-surface);
+  border: 2px solid var(--ed-border);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.colorpick__btn:hover { transform: translateY(-3px); }
+.colorpick__btn .rune-pip { width: 34px; height: 34px; font-size: 1rem; }
+.colorpick__btn--W:hover { border-color: var(--rune-W); }
+.colorpick__btn--U:hover { border-color: var(--rune-U); }
+.colorpick__btn--B:hover { border-color: #666; }
+.colorpick__btn--R:hover { border-color: var(--rune-R); }
+.colorpick__btn--G:hover { border-color: var(--rune-G); }
+.colorpick__btn--P:hover { border-color: var(--rune-P); }
+.colorpick__btn--C:hover { border-color: var(--rune-C); }
+
+.deck-create__count {
+  font-size: 0.8rem;
+  color: var(--ed-text-dim);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+.editor__nav .deck-create__count + .btn-primary { margin-left: 12px; }
+
+.totals {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--ed-border);
+  border-radius: 6px;
+}
+.totals__label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ed-text-faint);
+}
+.totals__runes {
+  display: flex;
+  gap: 4px 10px;
+  flex-wrap: wrap;
+}
+.totals__empty { color: var(--ed-text-faint); }
+.totals__sep { flex: 1; }
+.totals__slot {
+  font-size: 0.8rem;
+  color: var(--ed-text-dim);
+}
+.totals__slot b {
+  color: var(--ed-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-pick { position: relative; }
+.hero-pick--locked {
+  opacity: 0.4;
+  filter: grayscale(0.5);
+}
+.hero-pick--locked .hero-card { cursor: not-allowed; }
+
+/* ── Modal ───────────────────────────────────────────────── */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+}
+.modal__box {
+  background: var(--ed-bg-2);
+  border: 1px solid var(--ed-border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  width: min(380px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.modal__box h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.modal__hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--ed-text-faint);
+}
+.modal__box input { width: 100%; padding: 9px 12px; }
+.modal__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}

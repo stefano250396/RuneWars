@@ -1,10 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import DeckCreate from './DeckCreate.jsx';
 import { SAMPLE_DECKS } from './sample-decks.js';
+import { parseCsv } from './csv.js';
+import { rowsToHeroes } from './heroes.js';
+import { heroToCard } from './adapt.js';
+import { slugId } from './vocab.js';
+import { RUNE_LETTERS } from './runes.js';
+import { useCsvSource } from './useCsvSource.js';
+import sampleHeroesCsv from '../sample-heroes.csv?raw';
+
+const DECKS_KEY = 'rw-editor-decks';
+
+function loadDecks() {
+  try {
+    const s = localStorage.getItem(DECKS_KEY);
+    if (s) return JSON.parse(s);
+  } catch { /* ignore */ }
+  return SAMPLE_DECKS;
+}
+function persistDecks(d) {
+  try { localStorage.setItem(DECKS_KEY, JSON.stringify(d)); } catch { /* ignore */ }
+}
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
 
 export default function DecksView({ onHome }) {
-  const decks = SAMPLE_DECKS;
+  const [decks, setDecks] = useState(loadDecks);
+  const [mode, setMode] = useState('collection'); // 'collection' | 'create'
   const [selectedId, setSelectedId] = useState(null);
+
+  // heroes come from the same source as the Database Eroi view
+  const heroSrc = useCsvSource('rw-editor-heroes', sampleHeroesCsv, 'sample-heroes.csv');
+  const heroes = useMemo(
+    () => rowsToHeroes(parseCsv(heroSrc.csvText)).heroes.map(heroToCard),
+    [heroSrc.csvText],
+  );
+
   const selected = decks.find((d) => d.id === selectedId) || null;
+
+  const saveDeck = ({ name, color, heroes: heroList, totals }) => {
+    const deck = {
+      id: `${slugId(name, 'mazzo')}-${Date.now().toString(36)}`,
+      name,
+      color,
+      heroes: heroList.map((h) => ({ id: h.id, name: h.name, color: h.color })),
+      runeTotals: totals.runes,
+      items: totals.items,
+      enchants: totals.enchants,
+      colors: [color],
+      cardCount: 0,
+      note: '',
+      updated: today(),
+    };
+    const next = [deck, ...decks];
+    setDecks(next);
+    persistDecks(next);
+    setMode('collection');
+    setSelectedId(deck.id);
+  };
+
+  if (mode === 'create') {
+    return (
+      <DeckCreate
+        heroes={heroes}
+        onCancel={() => setMode('collection')}
+        onSave={saveDeck}
+      />
+    );
+  }
 
   return (
     <>
@@ -12,8 +76,8 @@ export default function DecksView({ onHome }) {
         <div className="editor__nav">
           <button type="button" className="crumb" onClick={onHome}>← Editor</button>
           <span className="editor__section">Gestore Mazzi</span>
-          <button type="button" className="btn-primary" disabled title="funzione in arrivo">
-            + Crea nuovo mazzo <span className="soon-tag">in arrivo</span>
+          <button type="button" className="btn-primary" onClick={() => { setSelectedId(null); setMode('create'); }}>
+            + Crea nuovo mazzo
           </button>
         </div>
       </header>
@@ -50,11 +114,15 @@ export default function DecksView({ onHome }) {
 }
 
 function DeckDetail({ deck, onClose }) {
+  const totalRunes = deck.runeTotals && Object.keys(deck.runeTotals).length > 0;
   return (
     <aside className="detail">
       <button type="button" className="detail__close" onClick={onClose} aria-label="Chiudi">×</button>
       <h2>{deck.name}</h2>
-      <div className="detail__meta">{deck.cardCount} carte · aggiornato {deck.updated}</div>
+      <div className="detail__meta">
+        {deck.color ? <>colore {deck.color} · </> : null}
+        {deck.cardCount} carte · aggiornato {deck.updated}
+      </div>
 
       <h3>Eroi ({deck.heroes.length})</h3>
       <ul className="deck-heroes">
@@ -67,15 +135,37 @@ function DeckDetail({ deck, onClose }) {
         ))}
       </ul>
 
-      <h3>Colori</h3>
-      <div className="detail__pips">
-        {deck.colors.map((c) => (
-          <span key={c} className={`rune-pip rune-pip--${c}`} title={c}>{c}</span>
-        ))}
-      </div>
+      {totalRunes && (
+        <>
+          <h3>Rune totali eroi</h3>
+          <div className="detail__pips">
+            {RUNE_LETTERS.filter((l) => deck.runeTotals[l]).map((l) => (
+              <span key={l} className="pool-chip">
+                <span className={`rune-pip rune-pip--${l}`} title={l}>{l}</span>×{deck.runeTotals[l]}
+              </span>
+            ))}
+          </div>
+          <p className="deck-note">Oggetti {deck.items ?? 0} · Incantesimi {deck.enchants ?? 0}</p>
+        </>
+      )}
 
-      <h3>Note</h3>
-      <p className="deck-note">{deck.note}</p>
+      {deck.colors && !totalRunes && (
+        <>
+          <h3>Colori</h3>
+          <div className="detail__pips">
+            {deck.colors.map((c) => (
+              <span key={c} className={`rune-pip rune-pip--${c}`} title={c}>{c}</span>
+            ))}
+          </div>
+        </>
+      )}
+
+      {deck.note && (
+        <>
+          <h3>Note</h3>
+          <p className="deck-note">{deck.note}</p>
+        </>
+      )}
 
       <button type="button" className="btn-primary" disabled title="funzione in arrivo" style={{ marginTop: 18 }}>
         Modifica mazzo <span className="soon-tag">in arrivo</span>
