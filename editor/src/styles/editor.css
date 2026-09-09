@@ -558,6 +558,20 @@ input::placeholder { color: var(--ed-text-faint); }
   margin-top: auto;
   font-variant-numeric: tabular-nums;
 }
+.deck-card__warn {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #ff8080;
+}
+
+.deck-issues {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.82rem;
+  color: #ffb0b0;
+  line-height: 1.5;
+}
+.deck-issues li { margin: 3px 0; }
 
 .hero-chip {
   width: 24px;
@@ -679,6 +693,11 @@ input::placeholder { color: var(--ed-text-faint); }
 }
 .totals__empty { color: var(--ed-text-faint); }
 .totals__sep { flex: 1; }
+.pool-chip--over {
+  color: #ff8080;
+  font-weight: 700;
+}
+.pool-chip--over .rune-pip { box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.6); }
 .totals__slot {
   font-size: 0.8rem;
   color: var(--ed-text-dim);

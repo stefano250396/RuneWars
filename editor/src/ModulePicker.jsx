@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import ActionCard from './components/ActionCard.jsx';
+import DeckTotals from './components/DeckTotals.jsx';
 import { useCsvSource } from './useCsvSource.js';
 import { parseCsv } from './csv.js';
 import { rowsToModules } from './modules.js';
@@ -17,7 +18,10 @@ function letterCounts(str) {
  * The Database Carte grid without the import hub. Single-select + Conferma.
  * `onConfirm(module)` returns the raw module object; `onCancel()` backs out.
  */
-export default function ModulePicker({ onConfirm, onCancel, title = 'Scegli un modulo' }) {
+export default function ModulePicker({
+  onConfirm, onCancel, title = 'Scegli un modulo',
+  pool, used, items = 0, enchants = 0,
+}) {
   const src = useCsvSource('rw-editor-modules', sampleModulesCsv, 'sample-modules.csv');
   const [search, setSearch] = useState('');
   const [cost, setCost] = useState('');
@@ -58,6 +62,14 @@ export default function ModulePicker({ onConfirm, onCancel, title = 'Scegli un m
 
   const chosen = modules.find((m) => m.id === chosenId) || null;
 
+  // preview: subtract the tentatively-chosen module's cost too
+  const previewUsed = useMemo(() => {
+    if (!used) return used;
+    const u = { ...used };
+    for (const l of chosen?.cost || []) u[l] = (u[l] || 0) + 1;
+    return u;
+  }, [used, chosen]);
+
   return (
     <>
       <header className="editor__header">
@@ -73,6 +85,10 @@ export default function ModulePicker({ onConfirm, onCancel, title = 'Scegli un m
             Conferma{chosen ? ` — ${chosen.name}` : ''}
           </button>
         </div>
+
+        {pool && (
+          <DeckTotals label="Rune rimanenti" pool={pool} used={previewUsed} items={items} enchants={enchants} />
+        )}
         <div className="toolbar">
           <label className="grow">
             Cerca nome

@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import HeroCard from './components/HeroCard.jsx';
 import HeroDetail from './components/HeroDetail.jsx';
+import DeckTotals from './components/DeckTotals.jsx';
 import DeckBuild from './DeckBuild.jsx';
-import { slotForSave } from './slotCard.js';
+import { slotForSave, deckIssues } from './slotCard.js';
 import { RUNE_LETTERS, RUNE_NAMES } from './runes.js';
 
 const MAX_HEROES = 3;
@@ -60,7 +61,8 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
   const confirmSave = () => {
     const name = deckName.trim() || 'Mazzo senza nome';
     const cards = slots.filter((s) => s.modules.length > 0).map((s) => slotForSave(s.modules));
-    onSave({ name, color, heroes: selectedHeroes, totals, cards });
+    const issues = deckIssues(totals.runes, slots);
+    onSave({ name, color, heroes: selectedHeroes, totals, cards, issues });
   };
 
   // ── Phase 1: colour ──
@@ -123,6 +125,7 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
           color={color}
           slots={slots}
           setSlots={setSlots}
+          heroTotals={totals}
           onBack={() => setStage('heroes')}
           onSaveRequest={() => { setDeckName(''); setNaming(true); }}
         />
@@ -155,20 +158,12 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
           </button>
         </div>
 
-        <div className="totals">
-          <span className="totals__label">Totali eroi selezionati</span>
-          <span className="totals__runes">
-            {RUNE_LETTERS.filter((l) => totals.runes[l]).map((l) => (
-              <span key={l} className="pool-chip">
-                <span className={`rune-pip rune-pip--${l}`}>{l}</span>×{totals.runes[l]}
-              </span>
-            ))}
-            {Object.keys(totals.runes).length === 0 && <span className="totals__empty">—</span>}
-          </span>
-          <span className="totals__sep" />
-          <span className="totals__slot">Oggetti <b>{totals.items}</b></span>
-          <span className="totals__slot">Incantesimi <b>{totals.enchants}</b></span>
-        </div>
+        <DeckTotals
+          label="Totali eroi selezionati"
+          pool={totals.runes}
+          items={totals.items}
+          enchants={totals.enchants}
+        />
       </header>
 
       <div className="editor__body">

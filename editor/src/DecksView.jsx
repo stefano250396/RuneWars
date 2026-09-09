@@ -46,13 +46,14 @@ export default function DecksView({ onHome }) {
     setSelectedId(null);
   };
 
-  const saveDeck = ({ name, color, heroes: heroList, totals, cards = [] }) => {
+  const saveDeck = ({ name, color, heroes: heroList, totals, cards = [], issues = [] }) => {
     const deck = {
       id: `${slugId(name, 'mazzo')}-${Date.now().toString(36)}`,
       name,
       color,
       heroes: heroList.map((h) => ({ id: h.id, name: h.name, color: h.color })),
       cards,
+      issues,
       runeTotals: totals.runes,
       items: totals.items,
       enchants: totals.enchants,
@@ -109,6 +110,11 @@ export default function DecksView({ onHome }) {
                     </span>
                   ))}
                 </span>
+                {d.issues && d.issues.length > 0 && (
+                  <span className="deck-card__warn" title={d.issues.join('\n')}>
+                    ⚠ {d.issues.length} problema/i
+                  </span>
+                )}
                 <span className="deck-card__meta">{d.cardCount} carte · agg. {d.updated}</span>
               </button>
             ))}
@@ -172,6 +178,15 @@ function DeckDetail({ deck, onClose, onDelete }) {
               <span key={c} className={`rune-pip rune-pip--${c}`} title={c}>{c}</span>
             ))}
           </div>
+        </>
+      )}
+
+      {deck.issues && deck.issues.length > 0 && (
+        <>
+          <h3>Problemi ({deck.issues.length})</h3>
+          <ul className="deck-issues">
+            {deck.issues.map((msg, i) => <li key={i}>{msg}</li>)}
+          </ul>
         </>
       )}
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ModulePicker from './ModulePicker.jsx';
-import { compileSlot } from './slotCard.js';
+import DeckTotals from './components/DeckTotals.jsx';
+import { compileSlot, usedRunes } from './slotCard.js';
 import { describeModule } from './describe.js';
 
 const SLOT_COUNT = 20;
@@ -8,10 +9,23 @@ const SLOT_COUNT = 20;
 /**
  * Deck cards phase. 20 slots; each is a card composed of modules.
  * `slots` / `setSlots` are owned by the parent so a save can read them.
+ * `heroTotals` = { runes, items, enchants } — the pool the heroes provide.
  */
-export default function DeckBuild({ color, slots, setSlots, onBack, onSaveRequest }) {
+export default function DeckBuild({ color, slots, setSlots, heroTotals, onBack, onSaveRequest }) {
   const [activeSlot, setActiveSlot] = useState(null);
   const [picking, setPicking] = useState(false);
+
+  const pool = heroTotals?.runes || {};
+  const used = usedRunes(slots);
+  const totalsBar = (
+    <DeckTotals
+      label="Rune rimanenti"
+      pool={pool}
+      used={used}
+      items={heroTotals?.items || 0}
+      enchants={heroTotals?.enchants || 0}
+    />
+  );
 
   const setSlot = (idx, modules) =>
     setSlots((prev) => prev.map((s, i) => (i === idx ? { modules } : s)));
@@ -28,6 +42,10 @@ export default function DeckBuild({ color, slots, setSlots, onBack, onSaveReques
     return (
       <ModulePicker
         title={`Carta ${activeSlot + 1} · scegli un modulo`}
+        pool={pool}
+        used={used}
+        items={heroTotals?.items || 0}
+        enchants={heroTotals?.enchants || 0}
         onConfirm={addModule}
         onCancel={() => setPicking(false)}
       />
@@ -45,6 +63,7 @@ export default function DeckBuild({ color, slots, setSlots, onBack, onSaveReques
             <button type="button" className="crumb" onClick={() => setActiveSlot(null)}>← Carte</button>
             <span className="editor__section">Carta {activeSlot + 1}</span>
           </div>
+          {totalsBar}
         </header>
 
         <div className="editor__body">
@@ -106,6 +125,7 @@ export default function DeckBuild({ color, slots, setSlots, onBack, onSaveReques
           <span className="deck-create__count">{filled} / {SLOT_COUNT} carte</span>
           <button type="button" onClick={onSaveRequest}>Salva mazzo</button>
         </div>
+        {totalsBar}
       </header>
 
       <div className="editor__body">
