@@ -3,8 +3,25 @@
  * its effects are the module effects one after another.
  */
 import { describeModule } from './describe.js';
+import { getCardColors } from './runes.js';
 
-export function compileSlot(modules) {
+/**
+ * Border colour of a composed card.
+ *  - single dominant rune  -> that colour
+ *  - tie: at least grey     -> grey
+ *  - tie: at least the deck's colour -> the deck's colour
+ *  - tie otherwise          -> colors[0]
+ */
+export function slotColor(runes, deckColor) {
+  const colors = getCardColors(runes);
+  if (colors.length === 0) return null;
+  if (colors.length === 1) return colors[0];
+  if (colors.includes('C')) return 'C';
+  if (deckColor && colors.includes(deckColor)) return deckColor;
+  return colors[0];
+}
+
+export function compileSlot(modules, deckColor) {
   const costLetters = modules.flatMap((m) => m.cost || []);
   const runes = {};
   for (const l of costLetters) runes[l] = (runes[l] || 0) + 1;
@@ -15,6 +32,7 @@ export function compileSlot(modules) {
     runes,
     runeStr: costLetters.join(''),
     runeCount: costLetters.length,
+    color: slotColor(runes, deckColor),
     text: modules.map((m) => describeModule(m)).filter(Boolean).join(' '),
     effects: modules.flatMap((m) => m.produces || []),
     name: modules.map((m) => m.name).join(' + '),

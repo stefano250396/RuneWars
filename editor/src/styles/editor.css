@@ -760,10 +760,18 @@ input::placeholder { color: var(--ed-text-faint); }
 
 .card-slot--filled {
   background: var(--ed-surface);
-  border: 1px solid var(--ed-border);
+  border: 2px solid var(--ed-border);
   cursor: pointer;
 }
-.card-slot--filled:hover { border-color: var(--ed-accent); transform: translateY(-2px); }
+.card-slot--filled:hover { transform: translateY(-2px); filter: brightness(1.12); }
+
+.card-slot--color-P { border-color: var(--rune-P); }
+.card-slot--color-G { border-color: var(--rune-G); }
+.card-slot--color-W { border-color: var(--rune-W); }
+.card-slot--color-U { border-color: var(--rune-U); }
+.card-slot--color-R { border-color: var(--rune-R); }
+.card-slot--color-B { border-color: #555; }
+.card-slot--color-C { border-color: var(--rune-C); }
 .card-slot__runes { display: flex; gap: 3px; flex-wrap: wrap; }
 .card-slot__text {
   font-size: 0.78rem;

@@ -56,7 +56,7 @@ export default function DeckBuild({ color, slots, setSlots, heroTotals, saveLabe
   // ── Single card editor ──
   if (activeSlot != null) {
     const mods = slots[activeSlot].modules;
-    const compiled = compileSlot(mods);
+    const compiled = compileSlot(mods, color);
     return (
       <>
         <header className="editor__header">
@@ -144,11 +144,11 @@ export default function DeckBuild({ color, slots, setSlots, heroTotals, saveLabe
                 </button>
               );
             }
-            const c = compileSlot(s.modules);
+            const c = compileSlot(s.modules, color);
             return (
               <div
                 key={i}
-                className="card-slot card-slot--filled"
+                className={`card-slot card-slot--filled ${c.color ? `card-slot--color-${c.color}` : ''}`}
                 onClick={() => setActiveSlot(i)}
                 role="button"
                 tabIndex={0}
