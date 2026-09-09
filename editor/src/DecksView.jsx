@@ -46,17 +46,18 @@ export default function DecksView({ onHome }) {
     setSelectedId(null);
   };
 
-  const saveDeck = ({ name, color, heroes: heroList, totals }) => {
+  const saveDeck = ({ name, color, heroes: heroList, totals, cards = [] }) => {
     const deck = {
       id: `${slugId(name, 'mazzo')}-${Date.now().toString(36)}`,
       name,
       color,
       heroes: heroList.map((h) => ({ id: h.id, name: h.name, color: h.color })),
+      cards,
       runeTotals: totals.runes,
       items: totals.items,
       enchants: totals.enchants,
       colors: [color],
-      cardCount: 0,
+      cardCount: cards.length,
       note: '',
       updated: today(),
     };

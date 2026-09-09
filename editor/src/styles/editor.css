@@ -695,6 +695,122 @@ input::placeholder { color: var(--ed-text-faint); }
 }
 .hero-pick--locked .hero-card { cursor: not-allowed; }
 
+/* ── Deck cards (20 slots) ───────────────────────────────── */
+
+.slot-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 210px));
+  gap: 14px;
+  padding: 24px;
+  align-content: start;
+}
+
+.card-slot {
+  min-height: 150px;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.card-slot--empty {
+  background: #d9d9de;
+  border: 1px dashed #9a9aa6;
+  align-items: center;
+  justify-content: center;
+  color: #6a6a76;
+  font-weight: 700;
+}
+.card-slot--empty:hover { transform: translateY(-2px); border-color: var(--ed-accent); }
+.card-slot__idx { font-size: 0.9rem; }
+
+.card-slot--filled {
+  background: var(--ed-surface);
+  border: 1px solid var(--ed-border);
+  cursor: pointer;
+}
+.card-slot--filled:hover { border-color: var(--ed-accent); transform: translateY(-2px); }
+.card-slot__runes { display: flex; gap: 3px; flex-wrap: wrap; }
+.card-slot__text {
+  font-size: 0.78rem;
+  color: var(--ed-text-dim);
+  line-height: 1.4;
+  flex: 1;
+  overflow: hidden;
+}
+.card-slot__mods { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.mod-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 4px 2px 8px;
+  border-radius: 999px;
+  background: rgba(240, 192, 64, 0.12);
+  color: var(--ed-accent);
+  border: 1px solid rgba(240, 192, 64, 0.28);
+}
+.mod-chip__x {
+  border: none;
+  background: rgba(0, 0, 0, 0.25);
+  color: inherit;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 0.75rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.mod-chip__x:hover { background: var(--ed-danger); color: #fff; border: none; }
+
+/* ── Single card editor ──────────────────────────────────── */
+
+.card-edit {
+  max-width: 520px;
+  margin: 24px;
+  padding: 20px;
+  background: var(--ed-surface);
+  border: 1px solid var(--ed-border);
+  border-radius: 8px;
+}
+.card-edit h3 {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ed-text-faint);
+  margin: 18px 0 8px;
+  border-bottom: 1px solid var(--ed-border);
+  padding-bottom: 4px;
+}
+.card-edit h3:first-child { margin-top: 0; }
+
+.card-edit__mods { list-style: none; margin: 0 0 16px; padding: 0; }
+.card-edit__mods li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(42, 42, 80, 0.5);
+}
+.card-edit__mod-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-edit__mod-name { font-weight: 700; font-size: 0.92rem; }
+.card-edit__mod-cost { display: inline-flex; gap: 3px; margin-left: auto; }
+.card-edit__mod-text {
+  margin: 6px 0 0;
+  font-size: 0.82rem;
+  color: var(--ed-text-dim);
+  line-height: 1.5;
+}
+
 /* ── Modal ───────────────────────────────────────────────── */
 
 .modal {

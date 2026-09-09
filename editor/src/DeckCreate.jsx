@@ -1,9 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import HeroCard from './components/HeroCard.jsx';
 import HeroDetail from './components/HeroDetail.jsx';
+import DeckBuild from './DeckBuild.jsx';
+import { slotForSave } from './slotCard.js';
 import { RUNE_LETTERS, RUNE_NAMES } from './runes.js';
 
 const MAX_HEROES = 3;
+const SLOT_COUNT = 20;
 
 function computeTotals(heroes) {
   const runes = {};
@@ -30,6 +33,8 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
   const [hoveredId, setHoveredId] = useState(null);
   const [naming, setNaming] = useState(false);
   const [deckName, setDeckName] = useState('');
+  const [stage, setStage] = useState('heroes'); // 'heroes' | 'cards'
+  const [slots, setSlots] = useState(() => Array.from({ length: SLOT_COUNT }, () => ({ modules: [] })));
 
   const pool = useMemo(
     () => (color ? heroes.filter((c) => c._hero.color === color || c._hero.color === 'C') : []),
@@ -54,7 +59,8 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
 
   const confirmSave = () => {
     const name = deckName.trim() || 'Mazzo senza nome';
-    onSave({ name, color, heroes: selectedHeroes, totals });
+    const cards = slots.filter((s) => s.modules.length > 0).map((s) => slotForSave(s.modules));
+    onSave({ name, color, heroes: selectedHeroes, totals, cards });
   };
 
   // ── Phase 1: colour ──
@@ -86,6 +92,45 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
     );
   }
 
+  const namingModal = naming && (
+    <div className="modal" onClick={() => setNaming(false)}>
+      <div className="modal__box" onClick={(e) => e.stopPropagation()}>
+        <h3>Salva mazzo</h3>
+        <p className="modal__hint">
+          {selectedIds.length} eroi · {slots.filter((s) => s.modules.length > 0).length} carte
+        </p>
+        <input
+          type="text"
+          autoFocus
+          placeholder="Nome del mazzo"
+          value={deckName}
+          onChange={(e) => setDeckName(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && confirmSave()}
+        />
+        <div className="modal__actions">
+          <button type="button" onClick={() => setNaming(false)}>Annulla</button>
+          <button type="button" className="btn-primary" onClick={confirmSave}>Aggiungi alla collezione</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── Phase 3: cards ──
+  if (stage === 'cards') {
+    return (
+      <>
+        <DeckBuild
+          color={color}
+          slots={slots}
+          setSlots={setSlots}
+          onBack={() => setStage('heroes')}
+          onSaveRequest={() => { setDeckName(''); setNaming(true); }}
+        />
+        {namingModal}
+      </>
+    );
+  }
+
   // ── Phase 2: heroes ──
   return (
     <>
@@ -100,9 +145,10 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
             type="button"
             className="btn-primary"
             disabled={!full}
-            title={full ? 'funzione in arrivo' : 'seleziona 3 eroi'}
+            title={full ? 'passa alle carte' : 'seleziona 3 eroi'}
+            onClick={() => full && setStage('cards')}
           >
-            Scegli questi eroi <span className="soon-tag">in arrivo</span>
+            Scegli questi eroi
           </button>
           <button type="button" onClick={() => { setDeckName(''); setNaming(true); }}>
             Salva mazzo
@@ -152,28 +198,7 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
         {hovered && <HeroDetail hero={hovered} />}
       </div>
 
-      {naming && (
-        <div className="modal" onClick={() => setNaming(false)}>
-          <div className="modal__box" onClick={(e) => e.stopPropagation()}>
-            <h3>Salva mazzo</h3>
-            <p className="modal__hint">
-              {selectedIds.length} eroi · {Object.values(totals.runes).reduce((a, b) => a + b, 0)} rune totali
-            </p>
-            <input
-              type="text"
-              autoFocus
-              placeholder="Nome del mazzo"
-              value={deckName}
-              onChange={(e) => setDeckName(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && confirmSave()}
-            />
-            <div className="modal__actions">
-              <button type="button" onClick={() => setNaming(false)}>Annulla</button>
-              <button type="button" className="btn-primary" onClick={confirmSave}>Aggiungi alla collezione</button>
-            </div>
-          </div>
-        </div>
-      )}
+      {namingModal}
     </>
   );
 }
