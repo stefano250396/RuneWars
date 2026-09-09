@@ -9,7 +9,11 @@ import { RUNE_LETTERS, RUNE_NAMES } from './runes.js';
 const MAX_HEROES = 3;
 const SLOT_COUNT = 20;
 
-function computeTotals(heroes) {
+/**
+ * Hero rune pool. Once 3 heroes are picked the deck also gets 3 bonus runes:
+ * of the deck's colour if ≥ 2 of the heroes share it, otherwise grey.
+ */
+function computeTotals(heroes, color) {
   const runes = {};
   let items = 0;
   let enchants = 0;
@@ -18,7 +22,15 @@ function computeTotals(heroes) {
     items += h.items || 0;
     enchants += h.enchants || 0;
   }
-  return { runes, items, enchants };
+
+  let bonus = null;
+  if (heroes.length === 3) {
+    const sameColor = heroes.filter((h) => h.color === color).length;
+    bonus = sameColor >= 2 ? color : 'C';
+    runes[bonus] = (runes[bonus] || 0) + 3;
+  }
+
+  return { runes, items, enchants, bonus };
 }
 
 /**
@@ -60,7 +72,7 @@ export default function DeckCreate({ heroes, initialDeck, onCancel, onSave }) {
     () => selectedIds.map((id) => heroes.find((c) => c.id === id)?._hero).filter(Boolean),
     [selectedIds, heroes],
   );
-  const totals = useMemo(() => computeTotals(selectedHeroes), [selectedHeroes]);
+  const totals = useMemo(() => computeTotals(selectedHeroes, color), [selectedHeroes, color]);
   const hovered = heroes.find((c) => c.id === hoveredId)?._hero || null;
   const full = selectedIds.length >= MAX_HEROES;
 
@@ -188,6 +200,7 @@ export default function DeckCreate({ heroes, initialDeck, onCancel, onSave }) {
           pool={totals.runes}
           items={totals.items}
           enchants={totals.enchants}
+          bonus={totals.bonus}
         />
       </header>
 

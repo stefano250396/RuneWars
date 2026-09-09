@@ -7,7 +7,7 @@ import { RUNE_LETTERS } from '../runes.js';
  *  - phase 3 (cards):  pass `used` too   -> shows what's LEFT (pool − used),
  *    red where it goes negative.
  */
-export default function DeckTotals({ label, pool = {}, items = 0, enchants = 0, used }) {
+export default function DeckTotals({ label, pool = {}, items = 0, enchants = 0, used, bonus }) {
   const remaining = !!used;
   const present = RUNE_LETTERS.filter((c) => (pool[c] || 0) > 0 || (used && (used[c] || 0) > 0));
 
@@ -28,6 +28,11 @@ export default function DeckTotals({ label, pool = {}, items = 0, enchants = 0, 
           );
         })}
       </span>
+      {bonus && (
+        <span className="totals__bonus" title="3 rune bonus (già incluse nei totali)">
+          bonus +3 <span className={`rune-pip rune-pip--${bonus}`} title={bonus}>{bonus}</span>
+        </span>
+      )}
       <span className="totals__sep" />
       <span className="totals__slot">Oggetti <b>{items}</b></span>
       <span className="totals__slot">Incantesimi <b>{enchants}</b></span>

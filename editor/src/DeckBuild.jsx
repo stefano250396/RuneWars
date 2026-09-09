@@ -24,6 +24,7 @@ export default function DeckBuild({ color, slots, setSlots, heroTotals, saveLabe
       used={used}
       items={heroTotals?.items || 0}
       enchants={heroTotals?.enchants || 0}
+      bonus={heroTotals?.bonus}
     />
   );
 
@@ -46,6 +47,7 @@ export default function DeckBuild({ color, slots, setSlots, heroTotals, saveLabe
         used={used}
         items={heroTotals?.items || 0}
         enchants={heroTotals?.enchants || 0}
+        bonus={heroTotals?.bonus}
         onConfirm={addModule}
         onCancel={() => setPicking(false)}
       />
