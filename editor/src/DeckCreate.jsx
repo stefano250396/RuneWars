@@ -14,15 +14,16 @@ const SLOT_COUNT = 20;
  * of the deck's colour if ≥ 2 of the heroes share it, otherwise grey.
  */
 function computeTotals(heroes, color) {
-  const runes = {};
+  const runesBase = {};
   let items = 0;
   let enchants = 0;
   for (const h of heroes) {
-    for (const [k, n] of Object.entries(h.runePool || {})) runes[k] = (runes[k] || 0) + n;
+    for (const [k, n] of Object.entries(h.runePool || {})) runesBase[k] = (runesBase[k] || 0) + n;
     items += h.items || 0;
     enchants += h.enchants || 0;
   }
 
+  const runes = { ...runesBase };
   let bonus = null;
   if (heroes.length === 3) {
     const sameColor = heroes.filter((h) => h.color === color).length;
@@ -30,7 +31,8 @@ function computeTotals(heroes, color) {
     runes[bonus] = (runes[bonus] || 0) + 3;
   }
 
-  return { runes, items, enchants, bonus };
+  // runesBase = hero pool only; runes = pool + the 3 bonus runes.
+  return { runesBase, runes, items, enchants, bonus };
 }
 
 /**
@@ -197,7 +199,7 @@ export default function DeckCreate({ heroes, initialDeck, onCancel, onSave }) {
 
         <DeckTotals
           label="Totali eroi selezionati"
-          pool={totals.runes}
+          pool={totals.runesBase}
           items={totals.items}
           enchants={totals.enchants}
           bonus={totals.bonus}

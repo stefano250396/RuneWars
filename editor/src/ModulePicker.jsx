@@ -20,7 +20,7 @@ function letterCounts(str) {
  */
 export default function ModulePicker({
   onConfirm, onCancel, title = 'Scegli un modulo',
-  pool, used, items = 0, enchants = 0, bonus,
+  pool, used, items = 0, enchants = 0,
 }) {
   const src = useCsvSource('rw-editor-modules', sampleModulesCsv, 'sample-modules.csv');
   const [search, setSearch] = useState('');
@@ -87,7 +87,7 @@ export default function ModulePicker({
         </div>
 
         {pool && (
-          <DeckTotals label="Rune rimanenti" pool={pool} used={previewUsed} items={items} enchants={enchants} bonus={bonus} />
+          <DeckTotals label="Rune rimanenti" pool={pool} used={previewUsed} items={items} enchants={enchants} />
         )}
         <div className="toolbar">
           <label className="grow">

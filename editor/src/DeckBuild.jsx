@@ -17,6 +17,7 @@ export default function DeckBuild({ color, slots, setSlots, heroTotals, saveLabe
 
   const pool = heroTotals?.runes || {};
   const used = usedRunes(slots);
+  // pool here already includes the +3 bonus runes (folded into their colour)
   const totalsBar = (
     <DeckTotals
       label="Rune rimanenti"
@@ -24,7 +25,6 @@ export default function DeckBuild({ color, slots, setSlots, heroTotals, saveLabe
       used={used}
       items={heroTotals?.items || 0}
       enchants={heroTotals?.enchants || 0}
-      bonus={heroTotals?.bonus}
     />
   );
 
@@ -47,7 +47,6 @@ export default function DeckBuild({ color, slots, setSlots, heroTotals, saveLabe
         used={used}
         items={heroTotals?.items || 0}
         enchants={heroTotals?.enchants || 0}
-        bonus={heroTotals?.bonus}
         onConfirm={addModule}
         onCancel={() => setPicking(false)}
       />
