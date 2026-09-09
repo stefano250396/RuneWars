@@ -11,7 +11,7 @@ const SLOT_COUNT = 20;
  * `slots` / `setSlots` are owned by the parent so a save can read them.
  * `heroTotals` = { runes, items, enchants } — the pool the heroes provide.
  */
-export default function DeckBuild({ color, slots, setSlots, heroTotals, onBack, onSaveRequest }) {
+export default function DeckBuild({ color, slots, setSlots, heroTotals, saveLabel = 'Salva mazzo', onBack, onSaveRequest }) {
   const [activeSlot, setActiveSlot] = useState(null);
   const [picking, setPicking] = useState(false);
 
@@ -123,7 +123,7 @@ export default function DeckBuild({ color, slots, setSlots, heroTotals, onBack, 
             Carte del mazzo <span className="editor__section-sub">colore {color}</span>
           </span>
           <span className="deck-create__count">{filled} / {SLOT_COUNT} carte</span>
-          <button type="button" onClick={onSaveRequest}>Salva mazzo</button>
+          <button type="button" onClick={onSaveRequest}>{saveLabel}</button>
         </div>
         {totalsBar}
       </header>

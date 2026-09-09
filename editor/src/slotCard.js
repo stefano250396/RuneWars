@@ -54,11 +54,23 @@ export function deckIssues(pool, slots) {
   return issues;
 }
 
-/** Lighter shape for storing a card inside a saved deck. */
+/**
+ * Shape stored for a card inside a saved deck. Keeps enough of each module
+ * (kind / produces / transform) to re-open the card for editing without
+ * depending on the module CSV being unchanged.
+ */
 export function slotForSave(modules) {
   const c = compileSlot(modules);
   return {
-    modules: modules.map((m) => ({ id: m.id, name: m.name, cost: m.cost })),
+    modules: modules.map((m) => ({
+      id: m.id,
+      name: m.name,
+      cost: m.cost,
+      kind: m.kind,
+      produces: m.produces,
+      transform: m.transform,
+      needsTarget: m.needsTarget,
+    })),
     runeStr: c.runeStr,
     effects: c.effects,
   };

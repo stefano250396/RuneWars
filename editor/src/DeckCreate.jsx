@@ -28,14 +28,28 @@ function computeTotals(heroes) {
  * `onSave({ name, color, heroes, totals })` adds a deck to the collection.
  * "Scegli questi eroi" is intentionally not wired yet.
  */
-export default function DeckCreate({ heroes, onCancel, onSave }) {
-  const [color, setColor] = useState(null);
-  const [selectedIds, setSelectedIds] = useState([]);
+export default function DeckCreate({ heroes, initialDeck, onCancel, onSave }) {
+  const editing = !!initialDeck;
+
+  const initialHeroIds = editing
+    ? (initialDeck.heroes || []).map((h) => h.id).filter((id) => heroes.some((c) => c.id === id))
+    : [];
+
+  const [color, setColor] = useState(initialDeck?.color || null);
+  const [selectedIds, setSelectedIds] = useState(initialHeroIds);
   const [hoveredId, setHoveredId] = useState(null);
   const [naming, setNaming] = useState(false);
-  const [deckName, setDeckName] = useState('');
-  const [stage, setStage] = useState('heroes'); // 'heroes' | 'cards'
-  const [slots, setSlots] = useState(() => Array.from({ length: SLOT_COUNT }, () => ({ modules: [] })));
+  const [deckName, setDeckName] = useState(initialDeck?.name || '');
+  const [stage, setStage] = useState(
+    editing && initialHeroIds.length === 3 ? 'cards' : 'heroes',
+  );
+  const [slots, setSlots] = useState(() => {
+    const base = Array.from({ length: SLOT_COUNT }, () => ({ modules: [] }));
+    (initialDeck?.cards || []).forEach((card, i) => {
+      if (i < SLOT_COUNT) base[i] = { modules: card.modules || [] };
+    });
+    return base;
+  });
 
   const pool = useMemo(
     () => (color ? heroes.filter((c) => c._hero.color === color || c._hero.color === 'C') : []),
@@ -94,10 +108,13 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
     );
   }
 
+  const openNaming = () => { if (!editing) setDeckName(''); setNaming(true); };
+  const saveLabel = editing ? 'Salva modifiche' : 'Salva mazzo';
+
   const namingModal = naming && (
     <div className="modal" onClick={() => setNaming(false)}>
       <div className="modal__box" onClick={(e) => e.stopPropagation()}>
-        <h3>Salva mazzo</h3>
+        <h3>{saveLabel}</h3>
         <p className="modal__hint">
           {selectedIds.length} eroi · {slots.filter((s) => s.modules.length > 0).length} carte
         </p>
@@ -111,7 +128,9 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
         />
         <div className="modal__actions">
           <button type="button" onClick={() => setNaming(false)}>Annulla</button>
-          <button type="button" className="btn-primary" onClick={confirmSave}>Aggiungi alla collezione</button>
+          <button type="button" className="btn-primary" onClick={confirmSave}>
+            {editing ? 'Salva' : 'Aggiungi alla collezione'}
+          </button>
         </div>
       </div>
     </div>
@@ -126,8 +145,9 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
           slots={slots}
           setSlots={setSlots}
           heroTotals={totals}
+          saveLabel={saveLabel}
           onBack={() => setStage('heroes')}
-          onSaveRequest={() => { setDeckName(''); setNaming(true); }}
+          onSaveRequest={openNaming}
         />
         {namingModal}
       </>
@@ -139,9 +159,16 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
     <>
       <header className="editor__header">
         <div className="editor__nav">
-          <button type="button" className="crumb" onClick={() => { setColor(null); setSelectedIds([]); }}>← Colore</button>
+          <button
+            type="button"
+            className="crumb"
+            onClick={editing ? onCancel : () => { setColor(null); setSelectedIds([]); }}
+          >
+            {editing ? '← Collezione' : '← Colore'}
+          </button>
           <span className="editor__section">
-            Nuovo mazzo · colore {color} <span className="editor__section-sub">({RUNE_NAMES[color]} + grigio)</span>
+            {editing ? `Modifica «${initialDeck.name}»` : 'Nuovo mazzo'} · colore {color}
+            <span className="editor__section-sub"> ({RUNE_NAMES[color]} + grigio)</span>
           </span>
           <span className="deck-create__count">{selectedIds.length} / {MAX_HEROES} eroi</span>
           <button
@@ -153,9 +180,7 @@ export default function DeckCreate({ heroes, onCancel, onSave }) {
           >
             Scegli questi eroi
           </button>
-          <button type="button" onClick={() => { setDeckName(''); setNaming(true); }}>
-            Salva mazzo
-          </button>
+          <button type="button" onClick={openNaming}>{saveLabel}</button>
         </div>
 
         <DeckTotals

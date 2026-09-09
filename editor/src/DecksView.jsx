@@ -29,6 +29,7 @@ export default function DecksView({ onHome }) {
   const [decks, setDecks] = useState(loadDecks);
   const [mode, setMode] = useState('collection'); // 'collection' | 'create'
   const [selectedId, setSelectedId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
 
   // heroes come from the same source as the Database Eroi view
   const heroSrc = useCsvSource('rw-editor-heroes', sampleHeroesCsv, 'sample-heroes.csv');
@@ -38,6 +39,7 @@ export default function DecksView({ onHome }) {
   );
 
   const selected = decks.find((d) => d.id === selectedId) || null;
+  const editingDeck = decks.find((d) => d.id === editingId) || null;
 
   const deleteDeck = (id) => {
     const next = decks.filter((d) => d.id !== id);
@@ -46,9 +48,14 @@ export default function DecksView({ onHome }) {
     setSelectedId(null);
   };
 
+  const startEdit = (deck) => {
+    setSelectedId(null);
+    setEditingId(deck.id);
+    setMode('create');
+  };
+
   const saveDeck = ({ name, color, heroes: heroList, totals, cards = [], issues = [] }) => {
-    const deck = {
-      id: `${slugId(name, 'mazzo')}-${Date.now().toString(36)}`,
+    const fields = {
       name,
       color,
       heroes: heroList.map((h) => ({ id: h.id, name: h.name, color: h.color })),
@@ -59,21 +66,32 @@ export default function DecksView({ onHome }) {
       enchants: totals.enchants,
       colors: [color],
       cardCount: cards.length,
-      note: '',
       updated: today(),
     };
-    const next = [deck, ...decks];
+
+    let next;
+    let landOn;
+    if (editingId) {
+      next = decks.map((d) => (d.id === editingId ? { ...d, ...fields } : d));
+      landOn = editingId;
+    } else {
+      const id = `${slugId(name, 'mazzo')}-${Date.now().toString(36)}`;
+      next = [{ id, note: '', ...fields }, ...decks];
+      landOn = id;
+    }
     setDecks(next);
     persistDecks(next);
     setMode('collection');
-    setSelectedId(deck.id);
+    setEditingId(null);
+    setSelectedId(landOn);
   };
 
   if (mode === 'create') {
     return (
       <DeckCreate
         heroes={heroes}
-        onCancel={() => setMode('collection')}
+        initialDeck={editingDeck}
+        onCancel={() => { setMode('collection'); setEditingId(null); }}
         onSave={saveDeck}
       />
     );
@@ -126,6 +144,7 @@ export default function DecksView({ onHome }) {
             deck={selected}
             onClose={() => setSelectedId(null)}
             onDelete={() => deleteDeck(selected.id)}
+            onEdit={() => startEdit(selected)}
           />
         )}
       </div>
@@ -133,7 +152,7 @@ export default function DecksView({ onHome }) {
   );
 }
 
-function DeckDetail({ deck, onClose, onDelete }) {
+function DeckDetail({ deck, onClose, onDelete, onEdit }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const totalRunes = deck.runeTotals && Object.keys(deck.runeTotals).length > 0;
   return (
@@ -198,8 +217,8 @@ function DeckDetail({ deck, onClose, onDelete }) {
       )}
 
       <div className="detail__foot">
-        <button type="button" className="btn-primary" disabled title="funzione in arrivo">
-          Modifica mazzo <span className="soon-tag">in arrivo</span>
+        <button type="button" className="btn-primary" onClick={onEdit}>
+          Modifica mazzo
         </button>
         <button
           type="button"
